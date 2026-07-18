@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lote 01-A — Catálogo técnico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #15171B;
+    --panel: #1E2126;
+    --panel-raised: #24282E;
+    --plate: #F4F1E8;
+    --plate-shadow: rgba(0,0,0,.45);
+    --ink: #EDEDE4;
+    --ink-dim: #9AA0A6;
+    --rivet: #3A3E44;
+    --brass: #C9A227;
+    --brass-dim: #8a6f1c;
+    --yellow: #F5C518;
+    --teal: #4FBDB4;
+    --amber: #D98E3B;
+    --line: #33373D;
+    --radius: 4px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(79,189,180,.05), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(201,162,39,.05), transparent 40%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family:'Rajdhani', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color:inherit; }
+
+  /* ---------- layout shell ---------- */
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- hero ---------- */
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding:32px 0 40px;
+    position:relative;
+  }
+
+  /* logo */
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:30px;
+  }
+  .brand-mark{ width:40px; height:40px; flex:0 0 auto; display:block; }
+  .brand-mark .dot{ fill:var(--yellow); }
+  .brand-mark .ring-dot{ fill:var(--yellow); opacity:.55; }
+  .brand-word{
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:.01em;
+    text-transform:none;
+    color:var(--ink);
+  }
+  .brand-word b{ color:var(--yellow); font-weight:700; }
+
+  /* dino track */
+  .dino-track{
+    position:relative;
+    height:56px;
+    margin-bottom:34px;
+    overflow:hidden;
+  }
+  .dino-track::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:14px;
+    height:0;
+    border-bottom:1px dashed var(--line);
+  }
+  .dino-walker{
+    position:absolute; bottom:12px; left:0;
+    width:34px; height:34px;
+    animation:walk 26s linear infinite;
+    will-change:transform;
+  }
+  .dino-jumper{ width:100%; height:100%; }
+  .dino-jumper.jumping{ animation:hop .6s ease-out; }
+  .dino-walker svg{ width:100%; height:100%; overflow:visible; }
+  .dino-walker .leg-a{ animation:legA .3s steps(1) infinite; transform-origin:17px 30px; }
+  .dino-walker .leg-b{ animation:legB .3s steps(1) infinite; transform-origin:17px 30px; }
+  .dino-walker.running .leg-a{ animation-duration:.12s; }
+  .dino-walker.running .leg-b{ animation-duration:.12s; }
+
+  @keyframes walk{
+    from{ transform:translateX(-40px); }
+    to{ transform:translateX(calc(100% + 40px)); }
+  }
+  @keyframes legA{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes legB{ 0%,49%{opacity:0} 50%,100%{opacity:1} }
+  @keyframes hop{
+    0%{ transform:translateY(0); }
+    35%{ transform:translateY(-22px); }
+    60%{ transform:translateY(-22px); }
+    100%{ transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .dino-walker{ animation:none; left:20px; }
+    .dino-walker .leg-a, .dino-walker .leg-b{ animation:none; opacity:1; }
+    .dino-jumper.jumping{ animation:none; }
+  }
+
+  .kicker{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin:0 0 10px;
+  }
+  h1.title{
+    font-size:clamp(2.1rem, 5vw, 3.4rem);
+    line-height:1.02;
+    margin:0;
+    color:var(--ink);
+  }
+  h1.title span{ color:var(--yellow); }
+  .subtitle{
+    color:var(--ink-dim);
+    font-size:1rem;
+    max-width:56ch;
+    margin:16px 0 0;
+    line-height:1.55;
+  }
+
+  .stats-strip{
+    display:flex; flex-wrap:wrap; gap:8px 0;
+    margin-top:32px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.82rem;
+    color:var(--ink-dim);
+  }
+  .stats-strip b{ color:var(--ink); font-weight:700; }
+  .stats-strip .sep{ color:var(--yellow); margin:0 14px; }
+
+  /* ---------- category nav ---------- */
+  nav.catnav{
+    position:sticky; top:0; z-index:20;
+    background:rgba(21,23,27,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.catnav .wrap{
+    display:flex; gap:2px; overflow-x:auto;
+    padding-top:0; padding-bottom:0;
+  }
+  nav.catnav a{
+    text-decoration:none;
+    white-space:nowrap;
+    padding:14px 16px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    border-bottom:2px solid transparent;
+  }
+  nav.catnav a:hover{ color:var(--ink); border-color:var(--brass); }
+
+  /* ---------- sections ---------- */
+  section.category{ padding:56px 0 8px; }
+  .cat-head{
+    display:flex; align-items:baseline; gap:14px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:14px;
+    margin-bottom:28px;
+  }
+  .cat-head h2{ font-size:1.7rem; margin:0; }
+  .cat-head .count{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--ink-dim);
+    font-size:.82rem;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+    gap:22px;
+    margin-bottom:12px;
+  }
+
+  /* ---------- product plate card ---------- */
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    position:relative;
+    display:flex; flex-direction:column;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .card:hover{ transform:translateY(-3px); border-color:var(--brass-dim); }
+  .card::before, .card::after,
+  .rivet-tl, .rivet-tr, .rivet-bl, .rivet-br{
+    content:""; position:absolute; width:6px; height:6px; border-radius:50%;
+    background:var(--rivet); box-shadow:inset 0 1px 1px rgba(0,0,0,.6);
+  }
+  .rivet-tl{ top:8px; left:8px; }
+  .rivet-tr{ top:8px; right:8px; }
+  .rivet-bl{ bottom:8px; left:8px; }
+  .rivet-br{ bottom:8px; right:8px; }
+
+  .card-media{
+    aspect-ratio: 4/3;
+    background: linear-gradient(160deg, #23262b, #1a1c20);
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+  .card-media img{
+    width:100%; height:100%; object-fit:contain;
+    padding:14px;
+    cursor:zoom-in;
+  }
+  .zoom-hint{
+    position:absolute; bottom:10px; right:10px;
+    width:30px; height:30px;
+    border-radius:50%;
+    background:rgba(21,23,27,.72);
+    border:1px solid var(--line);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none;
+    opacity:0; transition:opacity .15s ease;
+    z-index:2;
+  }
+  .card-media:hover .zoom-hint{ opacity:1; }
+
+  /* ---------- lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0;
+    background:rgba(10,11,13,.92);
+    display:flex; align-items:center; justify-content:center;
+    padding:40px;
+    z-index:100;
+    opacity:0; visibility:hidden;
+    transition:opacity .2s ease;
+    overflow:hidden;
+  }
+  .lightbox.active{ opacity:1; visibility:visible; }
+  .lightbox-stage{
+    max-width:90vw; max-height:88vh;
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    touch-action:none;
+  }
+  .lightbox-stage img{
+    max-width:90vw; max-height:88vh;
+    object-fit:contain;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+    border-radius:2px;
+    transform-origin:center center;
+    transition:transform .08s ease-out;
+    user-select:none;
+    -webkit-user-drag:none;
+  }
+  .lightbox-stage.zoomed img{ cursor:grab; transition:none; }
+  .lightbox-stage.zoomed.dragging img{ cursor:grabbing; }
+  .lightbox-close{
+    position:absolute; top:22px; right:26px;
+    background:transparent; border:1px solid var(--line);
+    color:var(--ink);
+    width:42px; height:42px;
+    border-radius:50%;
+    font-size:1.1rem;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .15s ease, color .15s ease;
+    z-index:2;
+  }
+  .lightbox-close:hover{ border-color:var(--brass); color:var(--brass); }
+  .lightbox-caption{
+    position:absolute; bottom:24px; left:0; right:0;
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.78rem;
+    color:var(--ink-dim);
+    letter-spacing:.04em;
+  }
+  .zoom-controls{
+    position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:2px;
+    background:rgba(30,33,38,.9);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:4px;
+    z-index:2;
+  }
+  .zoom-controls button{
+    width:34px; height:34px;
+    background:transparent; border:none;
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-size:1rem;
+    cursor:pointer;
+    border-radius:4px;
+  }
+  .zoom-controls button:hover{ background:rgba(201,162,39,.15); color:var(--brass); }
+  .zoom-controls .zoom-level{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    color:var(--ink-dim);
+    padding:0 8px;
+    min-width:48px;
+    text-align:center;
+  }
+  .placeholder-ph{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    color:var(--ink-dim);
+    font-family:'JetBrains Mono', monospace;
+    font-size:.66rem;
+    text-align:center;
+    padding:0 20px;
+    letter-spacing:.04em;
+  }
+  .placeholder-ph svg{ opacity:.35; }
+
+  .tag{
+    position:absolute; top:10px; left:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.62rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:2px;
+    z-index:2;
+  }
+  .tag.confirmado{ background:rgba(79,189,180,.15); color:var(--teal); border:1px solid rgba(79,189,180,.4); }
+  .tag.equivalente{ background:rgba(201,162,39,.15); color:var(--brass); border:1px solid rgba(201,162,39,.4); }
+  .tag.estimado{ background:rgba(217,142,59,.15); color:var(--amber); border:1px solid rgba(217,142,59,.4); }
+
+  .card-body{ padding:18px 18px 20px; display:flex; flex-direction:column; gap:12px; flex:1; }
+  .card-body h3{
+    font-size:1.15rem;
+    margin:0;
+    line-height:1.2;
+    color:var(--ink);
+  }
+  .specs{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.76rem;
+    line-height:1.65;
+    color:var(--ink-dim);
+    margin:0;
+    padding:0;
+    list-style:none;
+    border-top:1px dashed var(--line);
+    padding-top:10px;
+  }
+  .specs li::before{ content:"› "; color:var(--brass-dim); }
+
+  .card-foot{
+    margin-top:auto;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+  .price{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--ink);
+    font-size:1.02rem;
+    font-weight:700;
+  }
+  .price small{
+    display:block; color:var(--ink-dim); font-weight:400; font-size:.66rem; text-transform:uppercase; letter-spacing:.06em;
+  }
+  .official-link{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.68rem;
+    text-decoration:none;
+    color:var(--teal);
+    border:1px solid rgba(79,189,180,.4);
+    padding:7px 10px;
+    border-radius:2px;
+    white-space:nowrap;
+    transition:background .15s ease;
+  }
+  .official-link:hover{ background:rgba(79,189,180,.12); }
+
+  /* ---------- footer / legend ---------- */
+  footer{
+    margin-top:70px;
+    border-top:1px solid var(--line);
+    padding:40px 0 60px;
+  }
+  .legend{
+    display:flex; gap:26px; flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.74rem;
+    color:var(--ink-dim);
+    margin-bottom:22px;
+  }
+  .legend b{ color:var(--ink); }
+  footer p{ color:var(--ink-dim); font-size:.85rem; line-height:1.6; max-width:70ch; }
+  footer .source-note{ font-size:.74rem; color:#6b7078; margin-top:18px; }
+
+  @media (max-width:640px){
+    .stats-strip .sep{ margin:0 10px; }
+    .dino-track{ height:44px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle class="dot" cx="20" cy="20" r="9"></circle>
+        <circle class="ring-dot" cx="20" cy="4"  r="2"></circle>
+        <circle class="ring-dot" cx="30.9" cy="9.1" r="2"></circle>
+        <circle class="ring-dot" cx="36" cy="20" r="2"></circle>
+        <circle class="ring-dot" cx="30.9" cy="30.9" r="2"></circle>
+        <circle class="ring-dot" cx="20" cy="36" r="2"></circle>
+        <circle class="ring-dot" cx="9.1" cy="30.9" r="2"></circle>
+        <circle class="ring-dot" cx="4" cy="20" r="2"></circle>
+        <circle class="ring-dot" cx="9.1" cy="9.1" r="2"></circle>
+      </svg>
+      <span class="brand-word">Hard<b>Ware</b></span>
+    </div>
+
+    <div class="dino-track" aria-hidden="true">
+      <div class="dino-walker" id="dinoWalker">
+        <div class="dino-jumper" id="dinoJumper">
+          <svg viewBox="0 0 34 34" fill="var(--yellow)">
+            <!-- cuerpo / cabeza / cola (fijo) -->
+            <rect x="12" y="4"  width="12" height="6"></rect>
+            <rect x="22" y="7"  width="4"  height="3"></rect>
+            <rect x="8"  y="10" width="16" height="10"></rect>
+            <rect x="2"  y="16" width="8"  height="4"></rect>
+            <!-- pata A -->
+            <g class="leg-a">
+              <rect x="10" y="20" width="4" height="8"></rect>
+              <rect x="19" y="20" width="4" height="6"></rect>
+            </g>
+            <!-- pata B -->
+            <g class="leg-b">
+              <rect x="10" y="20" width="4" height="6"></rect>
+              <rect x="19" y="20" width="4" height="8"></rect>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <p class="kicker">Lote 01-A · Julio 2026 · Montevideo</p>
+    <h1 class="title">Hardware real.<br><span>Cero relato de vendedor.</span></h1>
+    <p class="subtitle">Cada pieza se chequeó contra el hardware físico antes de subirse acá. Lo que ves en la ficha es exactamente lo que se entrega.</p>
+
+    <div class="stats-strip">
+      <span><b>13</b> componentes</span><span class="sep">·</span>
+      <span><b>3</b> placas de video</span><span class="sep">·</span>
+      <span><b>3</b> motherboards</span><span class="sep">·</span>
+    </div>
+  </div>
+</header>
+
+<script>
+  (function(){
+    var walker = document.getElementById('dinoWalker');
+    var jumper = document.getElementById('dinoJumper');
+    var toggle = 0;
+    function tick(){
+      toggle = 1 - toggle;
+      if(toggle === 0){
+        walker.classList.add('running');
+        setTimeout(function(){ walker.classList.remove('running'); }, 2600);
+      } else {
+        jumper.classList.add('jumping');
+        setTimeout(function(){ jumper.classList.remove('jumping'); }, 650);
+      }
+    }
+    setInterval(tick, 15000);
+  })();
+</script>
+
+<nav class="catnav">
+  <div class="wrap">
+    <a href="#gpu">Placas de video</a>
+    <a href="#mb">Motherboards</a>
+    <a href="#cpu">Procesadores</a>
+    <a href="#ram">Memoria RAM</a>
+    <a href="#acc">Accesorios</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ======================= GPU ======================= -->
+  <section class="category" id="gpu">
+    <div class="cat-head">
+      <h2>Placas de video</h2>
+      <span class="count">3 ítems · ~65% del valor del lote</span>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag equivalente">Equivalente</span>
+          <img src="video1.webp" alt="XFX Radeon RX 9070 XT Quicksilver 16GB"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=2 y=7 width=20 height=10 rx=1.5/><circle cx=7 cy=12 r=2.4/><circle cx=13 cy=12 r=2.4/></svg><span>video1.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>XFX Radeon RX 9070 XT Quicksilver 16GB</h3>
+          <ul class="specs">
+            <li>RDNA4 · 64 CU / 4096 stream processors</li>
+            <li>16GB GDDR6 · bus 256-bit · hasta 640 GB/s</li>
+            <li>PCIe 5.0 · Boost hasta 2970 MHz</li>
+            <li>3 fans, perfil 3.5 slots · PSU 800W+</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 950<small>Referencia Aslan / Laaca</small></div>
+            <a class="official-link" href="https://www.xfxforce.com/shop/xfx-quicksilver-amd-radeon-rx-9070xt-gaming-edition" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag confirmado">Confirmado</span>
+          <img src="video2.webp" alt="Gigabyte RX 7800 XT Gaming OC 16GB"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=2 y=7 width=20 height=10 rx=1.5/><circle cx=7 cy=12 r=2.4/><circle cx=13 cy=12 r=2.4/></svg><span>video2.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>Gigabyte RX 7800 XT Gaming OC 16GB</h3>
+          <ul class="specs">
+            <li>RDNA3 · 60 CU / 3840 stream processors</li>
+            <li>16GB GDDR6 · bus 256-bit · hasta 624 GB/s</li>
+            <li>PCIe 4.0 · Boost hasta 2565 MHz</li>
+            <li>WINDFORCE 3 fans · backplate metálico</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 799<small>Mismo part number, Aslan UY</small></div>
+            <a class="official-link" href="https://www.gigabyte.com/Graphics-Card/GV-R78XTGAMING-OC-16GD" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag equivalente">Equivalente</span>
+          <img src="video3.webp" alt="PNY GeForce RTX 5070 OC 12GB"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=2 y=7 width=20 height=10 rx=1.5/><circle cx=7 cy=12 r=2.4/><circle cx=13 cy=12 r=2.4/></svg><span>video3.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>PNY GeForce RTX 5070 OC 12GB</h3>
+          <ul class="specs">
+            <li>Blackwell · 6144 CUDA cores</li>
+            <li>12GB GDDR7 · bus 192-bit · 28 Gbps</li>
+            <li>PCIe 5.0 · Boost hasta 2542–2557 MHz</li>
+            <li>Variante OC confirmada por etiqueta · PSU 650W</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 800<small>Vs. MSI Ventus / Zotac Solid</small></div>
+            <a class="official-link" href="https://www.pny.com/geforce-rtx-5070-models" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======================= MOTHERBOARDS ======================= -->
+  <section class="category" id="mb">
+    <div class="cat-head">
+      <h2>Motherboards</h2>
+      <span class="count">3 ítems</span>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag confirmado">Confirmado</span>
+          <img src="motherboard1.webp" alt="Gigabyte B840M DS3H"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=3 width=18 height=18 rx=1.5/><circle cx=8 cy=8 r=1.3/><path d=\'M13 3v18M3 13h18\'/></svg><span>motherboard1.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>Gigabyte B840M DS3H</h3>
+          <ul class="specs">
+            <li>Socket AM5 · Ryzen 7000/8000/9000</li>
+            <li>Chipset B840 · 4x DDR5 hasta 256GB (8200 OC)</li>
+            <li>1x PCIe 4.0 x16 · 2x M.2 PCIe 4.0</li>
+            <li>Formato Micro-ATX</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 180<small>Mismo modelo, Newtek</small></div>
+            <a class="official-link" href="https://www.gigabyte.com/Motherboard/B840M-DS3H-rev-10" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="motherboard2.webp" alt="MSI PRO B650M-P"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=3 width=18 height=18 rx=1.5/><circle cx=8 cy=8 r=1.3/><path d=\'M13 3v18M3 13h18\'/></svg><span>motherboard2.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>MSI PRO B650M-P</h3>
+          <ul class="specs">
+            <li>Socket AM5 · Chipset B650</li>
+            <li>Soporte DDR5 · PCIe 4.0</li>
+            <li>Serie PRO orientada a productividad</li>
+            <li>Formato Micro-ATX</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 220<small>Sin publicación local</small></div>
+            <a class="official-link" href="https://www.msi.com/Motherboard/PRO-B650M-P" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag confirmado">Confirmado</span>
+          <img src="motherboard3.webp" alt="ASRock B550M-HDV"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=3 width=18 height=18 rx=1.5/><circle cx=8 cy=8 r=1.3/><path d=\'M13 3v18M3 13h18\'/></svg><span>motherboard3.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>ASRock B550M-HDV</h3>
+          <ul class="specs">
+            <li>Socket AM4 · Ryzen 3000/4000G/5000</li>
+            <li>Chipset B550 · DDR4 hasta 4733+ (OC)</li>
+            <li>1x PCIe 4.0 x16 + 1x PCIe 3.0 x1 · 4x SATA3</li>
+            <li>Audio 7.1 Realtek ALC887 · Micro-ATX</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 249<small>Mismo modelo, PC Store</small></div>
+            <a class="official-link" href="https://www.asrock.com/mb/AMD/B550M-HDV/" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======================= CPU ======================= -->
+  <section class="category" id="cpu">
+    <div class="cat-head">
+      <h2>Procesadores</h2>
+      <span class="count">2 ítems</span>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag equivalente">Equivalente</span>
+          <img src="cpu1.webp" alt="AMD Ryzen 7 5700X"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=6 y=6 width=12 height=12 rx=1/><path d=\'M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4\'/></svg><span>cpu1.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>AMD Ryzen 7 5700X</h3>
+          <ul class="specs">
+            <li>Socket AM4 · Zen 3 · 8 núcleos / 16 hilos</li>
+            <li>Base 3.4 GHz · Boost hasta 4.6 GHz</li>
+            <li>Caché L2 4MB / L3 32MB · TDP 65W</li>
+            <li>Combo ASRock incluido en la venta</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 290<small>Precio suelto, sin combo local</small></div>
+            <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="cpu2.webp" alt="AMD Athlon X4 950"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=6 y=6 width=12 height=12 rx=1/><path d=\'M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4\'/></svg><span>cpu2.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>AMD Athlon X4 950</h3>
+          <ul class="specs">
+            <li>Socket AM4 · 4 núcleos / 4 hilos</li>
+            <li>Blister original sin abrir</li>
+            <li>Nicho / descontinuado</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 30<small>Sin listado en UY</small></div>
+            <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Buscar ficha ↗</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======================= RAM ======================= -->
+  <section class="category" id="ram">
+    <div class="cat-head">
+      <h2>Memoria RAM</h2>
+      <span class="count">3 ítems</span>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="ram1.webp" alt="Kingston FURY Beast DDR5 64GB kit"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=8 width=18 height=8 rx=1/><path d=\'M6 8v8M10 8v8M14 8v8M18 8v8\'/></svg><span>ram1.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>Kingston FURY Beast DDR5 64GB kit</h3>
+          <ul class="specs">
+            <li>Kit 2x32GB · DDR5-6000 CL30/36</li>
+            <li>RGB · Perfiles Intel XMP 3.0 / AMD EXPO</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 430<small>Ítem de mayor peso a confirmar</small></div>
+            <a class="official-link" href="https://www.kingston.com/en/memory/gaming/kingston-fury-beast-ddr5-rgb-memory" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="ram2.webp" alt="KingBank SharpBlade DDR5 16GB"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=8 width=18 height=8 rx=1/><path d=\'M6 8v8M10 8v8M14 8v8M18 8v8\'/></svg><span>ram2.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>KingBank SharpBlade DDR5 16GB</h3>
+          <ul class="specs">
+            <li>Edición MSI MPOWER</li>
+            <li>Logo y edición confirmados por foto</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 110<small>No listado en tiendas UY</small></div>
+            <a class="official-link" href="https://kingbank.com/" target="_blank" rel="noopener">Sitio del fabricante ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="ram3.webp" alt="Samsung DDR4 (2 módulos)"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=8 width=18 height=8 rx=1/><path d=\'M6 8v8M10 8v8M14 8v8M18 8v8\'/></svg><span>ram3.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>Samsung DDR4 (2 módulos)</h3>
+          <ul class="specs">
+            <li>Instalados y confirmados en el combo ASRock (Ryzen 5700X)</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 50<small>Patrón de mercado</small></div>
+            <span class="official-link" style="opacity:.4; pointer-events:none;">Sin ficha específica</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======================= ACCESORIOS ======================= -->
+  <section class="category" id="acc">
+    <div class="cat-head">
+      <h2>Accesorios</h2>
+      <span class="count">2 ítems · 7 ventiladores</span>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="fan1.webp" alt="Ventilador DeepCool CF120"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><circle cx=12 cy=12 r=9/><path d=\'M12 3c1 3 1 5 0 9M21 12c-3 1-5 1-9 0M12 21c-1-3-1-5 0-9M3 12c3-1 5-1 9 0\'/></svg><span>fan1.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>Ventilador DeepCool CF120 — x5</h3>
+          <ul class="specs">
+            <li>Modelo DF1202512CL007 · 120mm</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 50<small>Las 5 unidades</small></div>
+            <a class="official-link" href="https://www.deepcool.com/products/Cooling/fans/CF120-RGB-PWM-Fan-Single/2021/11469.shtml" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
+        <div class="card-media">
+          <span class="tag estimado">Estimado</span>
+          <img src="fan2.webp" alt="Ventilador Nox Hummer Fan Series"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><circle cx=12 cy=12 r=9/><path d=\'M12 3c1 3 1 5 0 9M21 12c-3 1-5 1-9 0M12 21c-1-3-1-5 0-9M3 12c3-1 5-1 9 0\'/></svg><span>fan2.webp</span>'}))">
+          <span class="zoom-hint">🔍</span>
+        </div>
+        <div class="card-body">
+          <h3>Ventilador Nox Hummer Fan Series — x2</h3>
+          <ul class="specs">
+            <li>120mm</li>
+          </ul>
+          <div class="card-foot">
+            <div class="price">US$ 35<small>Las 2 unidades</small></div>
+            <a class="official-link" href="https://www.nox-xtreme.com/refrigeracion/s-fan" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="legend">
+      <span><b>Confirmado</b> — mismo modelo publicado en tienda uruguaya, precio verificado.</span>
+      <span><b>Equivalente</b> — modelo exacto no encontrado; se usó otro de la misma línea y tier.</span>
+      <span><b>Estimado</b> — sin publicación local; multiplicador de mercado aplicado.</span>
+    </div>
+    <p>Precios de referencia relevados en tiendas de Uruguay (Aslan, PC Store, PC Parts, Newtek Computers, Sampler y Laaca/Tienda Geek) el 18/07/2026. Son precios de lista, contado/transferencia — pueden variar por stock, tipo de cambio y promociones. Escribime si te interesa algún ítem en particular o el lote completo.</p>
+    <p class="source-note">Lote 01-A · 13 componentes verificados contra hardware físico · Catálogo generado julio 2026</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar imagen ampliada">✕</button>
+  <div class="lightbox-stage" id="lightboxStage">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+  <div class="zoom-controls">
+    <button id="zoomOut" aria-label="Alejar">−</button>
+    <span class="zoom-level" id="zoomLevel">100%</span>
+    <button id="zoomIn" aria-label="Acercar">+</button>
+    <button id="zoomReset" aria-label="Restablecer zoom" title="Restablecer">⤾</button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var lightbox = document.getElementById('lightbox');
+    var stage = document.getElementById('lightboxStage');
+    var lightboxImg = document.getElementById('lightboxImg');
+    var lightboxCaption = document.getElementById('lightboxCaption');
+    var closeBtn = document.getElementById('lightboxClose');
+    var zoomInBtn = document.getElementById('zoomIn');
+    var zoomOutBtn = document.getElementById('zoomOut');
+    var zoomResetBtn = document.getElementById('zoomReset');
+    var zoomLevelEl = document.getElementById('zoomLevel');
+
+    var scale = 1, minScale = 1, maxScale = 4.5;
+    var posX = 0, posY = 0;
+    var dragging = false, startX = 0, startY = 0, startPosX = 0, startPosY = 0;
+
+    function applyTransform(){
+      lightboxImg.style.transform = 'translate(' + posX + 'px,' + posY + 'px) scale(' + scale + ')';
+      zoomLevelEl.textContent = Math.round(scale * 100) + '%';
+      stage.classList.toggle('zoomed', scale > 1.001);
+      if(scale <= 1.001){ posX = 0; posY = 0; }
+    }
+
+    function clampPan(){
+      var maxOffset = (scale - 1) * 260;
+      posX = Math.max(-maxOffset, Math.min(maxOffset, posX));
+      posY = Math.max(-maxOffset, Math.min(maxOffset, posY));
+    }
+
+    function setScale(next, cx, cy){
+      next = Math.max(minScale, Math.min(maxScale, next));
+      scale = next;
+      clampPan();
+      applyTransform();
+    }
+
+    function openLightbox(src, alt){
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      lightboxCaption.textContent = alt || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      scale = 1; posX = 0; posY = 0;
+      applyTransform();
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+      lightboxImg.src = '';
+    }
+
+    document.querySelectorAll('.card-media img').forEach(function(img){
+      img.addEventListener('click', function(){
+        openLightbox(img.currentSrc || img.src, img.alt);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function(e){
+      if(e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', function(e){
+      if(!lightbox.classList.contains('active')) return;
+      if(e.key === 'Escape') closeLightbox();
+      if(e.key === '+' || e.key === '=') setScale(scale + 0.5);
+      if(e.key === '-') setScale(scale - 0.5);
+      if(e.key === '0') setScale(1);
+    });
+
+    zoomInBtn.addEventListener('click', function(){ setScale(scale + 0.6); });
+    zoomOutBtn.addEventListener('click', function(){ setScale(scale - 0.6); });
+    zoomResetBtn.addEventListener('click', function(){ setScale(1); });
+
+    // rueda del mouse para acercar/alejar
+    stage.addEventListener('wheel', function(e){
+      e.preventDefault();
+      var delta = e.deltaY > 0 ? -0.35 : 0.35;
+      setScale(scale + delta);
+    }, { passive:false });
+
+    // doble click cicla entre 1x / 2.2x / 4x
+    lightboxImg.addEventListener('dblclick', function(){
+      if(scale < 1.5) setScale(2.2);
+      else if(scale < 3.5) setScale(4);
+      else setScale(1);
+    });
+
+    // arrastrar para paneo cuando hay zoom (mouse)
+    lightboxImg.addEventListener('mousedown', function(e){
+      if(scale <= 1.001) return;
+      dragging = true;
+      stage.classList.add('dragging');
+      startX = e.clientX; startY = e.clientY;
+      startPosX = posX; startPosY = posY;
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function(e){
+      if(!dragging) return;
+      posX = startPosX + (e.clientX - startX);
+      posY = startPosY + (e.clientY - startY);
+      clampPan();
+      applyTransform();
+    });
+    window.addEventListener('mouseup', function(){
+      dragging = false;
+      stage.classList.remove('dragging');
+    });
+
+    // pinch-to-zoom táctil
+    var touchStartDist = null, touchStartScale = 1;
+    stage.addEventListener('touchstart', function(e){
+      if(e.touches.length === 2){
+        touchStartDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        touchStartScale = scale;
+      } else if(e.touches.length === 1 && scale > 1.001){
+        dragging = true;
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+        startPosX = posX; startPosY = posY;
+      }
+    }, { passive:true });
+    stage.addEventListener('touchmove', function(e){
+      if(e.touches.length === 2 && touchStartDist){
+        var dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        setScale(touchStartScale * (dist / touchStartDist));
+      } else if(e.touches.length === 1 && dragging){
+        posX = startPosX + (e.touches[0].clientX - startX);
+        posY = startPosY + (e.touches[0].clientY - startY);
+        clampPan();
+        applyTransform();
+      }
+    }, { passive:true });
+    stage.addEventListener('touchend', function(e){
+      if(e.touches.length < 2) touchStartDist = null;
+      if(e.touches.length === 0) dragging = false;
+    });
+  })();
+</script>
+
+</body>
+</html>
