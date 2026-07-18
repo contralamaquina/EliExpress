@@ -36,6 +36,7 @@
     color:var(--ink);
     font-family:'Inter', sans-serif;
     -webkit-font-smoothing:antialiased;
+    padding-bottom: 60px;
   }
   h1,h2,h3, .display{
     font-family:'Rajdhani', sans-serif;
@@ -45,17 +46,14 @@
   .mono{ font-family:'JetBrains Mono', monospace; }
   a{ color:inherit; }
 
-  /* ---------- layout shell ---------- */
   .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
 
-  /* ---------- hero ---------- */
   header.hero{
     border-bottom:1px solid var(--line);
     padding:32px 0 40px;
     position:relative;
   }
 
-  /* logo */
   .brand{
     display:flex; align-items:center; gap:12px;
     margin-bottom:30px;
@@ -72,51 +70,6 @@
     color:var(--ink);
   }
   .brand-word b{ color:var(--yellow); font-weight:700; }
-
-  /* dino track */
-  .dino-track{
-    position:relative;
-    height:56px;
-    margin-bottom:34px;
-    overflow:hidden;
-  }
-  .dino-track::after{
-    content:"";
-    position:absolute; left:0; right:0; bottom:14px;
-    height:0;
-    border-bottom:1px dashed var(--line);
-  }
-  .dino-walker{
-    position:absolute; bottom:12px; left:0;
-    width:34px; height:34px;
-    animation:walk 26s linear infinite;
-    will-change:transform;
-  }
-  .dino-jumper{ width:100%; height:100%; }
-  .dino-jumper.jumping{ animation:hop .6s ease-out; }
-  .dino-walker svg{ width:100%; height:100%; overflow:visible; }
-  .dino-walker .leg-a{ animation:legA .3s steps(1) infinite; transform-origin:17px 30px; }
-  .dino-walker .leg-b{ animation:legB .3s steps(1) infinite; transform-origin:17px 30px; }
-  .dino-walker.running .leg-a{ animation-duration:.12s; }
-  .dino-walker.running .leg-b{ animation-duration:.12s; }
-
-  @keyframes walk{
-    from{ transform:translateX(-40px); }
-    to{ transform:translateX(calc(100% + 40px)); }
-  }
-  @keyframes legA{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
-  @keyframes legB{ 0%,49%{opacity:0} 50%,100%{opacity:1} }
-  @keyframes hop{
-    0%{ transform:translateY(0); }
-    35%{ transform:translateY(-22px); }
-    60%{ transform:translateY(-22px); }
-    100%{ transform:translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .dino-walker{ animation:none; left:20px; }
-    .dino-walker .leg-a, .dino-walker .leg-b{ animation:none; opacity:1; }
-    .dino-jumper.jumping{ animation:none; }
-  }
 
   .kicker{
     font-family:'JetBrains Mono', monospace;
@@ -151,7 +104,6 @@
   .stats-strip b{ color:var(--ink); font-weight:700; }
   .stats-strip .sep{ color:var(--yellow); margin:0 14px; }
 
-  /* ---------- category nav ---------- */
   nav.catnav{
     position:sticky; top:0; z-index:20;
     background:rgba(21,23,27,.92);
@@ -175,7 +127,6 @@
   }
   nav.catnav a:hover{ color:var(--ink); border-color:var(--brass); }
 
-  /* ---------- sections ---------- */
   section.category{ padding:56px 0 8px; }
   .cat-head{
     display:flex; align-items:baseline; gap:14px;
@@ -197,7 +148,6 @@
     margin-bottom:12px;
   }
 
-  /* ---------- product plate card ---------- */
   .card{
     background:var(--panel);
     border:1px solid var(--line);
@@ -244,7 +194,6 @@
   }
   .card-media:hover .zoom-hint{ opacity:1; }
 
-  /* ---------- lightbox ---------- */
   .lightbox{
     position:fixed; inset:0;
     background:rgba(10,11,13,.92);
@@ -396,7 +345,6 @@
   }
   .official-link:hover{ background:rgba(79,189,180,.12); }
 
-  /* ---------- footer / legend ---------- */
   footer{
     margin-top:70px;
     border-top:1px solid var(--line);
@@ -415,7 +363,143 @@
 
   @media (max-width:640px){
     .stats-strip .sep{ margin:0 10px; }
-    .dino-track{ height:44px; }
+  }
+
+  /* =========================================
+     NUEVO: DINO WORLD & ABducción
+     ========================================= */
+  .dino-world {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    pointer-events: none;
+    z-index: 45;
+    overflow: hidden;
+  }
+  .dino-floor {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--line), transparent);
+  }
+  
+  .dino-walker {
+    position: absolute;
+    bottom: 2px;
+    left: -50px;
+    width: 40px;
+    height: 40px;
+    will-change: transform;
+  }
+  .dino-jumper { width: 100%; height: 100%; }
+  .dino-jumper.jumping { animation: hop .6s ease-out; }
+  .dino-walker svg { width: 100%; height: 100%; overflow: visible; }
+  .dino-walker .leg-a { animation: legA .3s steps(1) infinite; transform-origin: 20px 34px; }
+  .dino-walker .leg-b { animation: legB .3s steps(1) infinite; transform-origin: 20px 34px; }
+  .dino-walker.running .leg-a, .dino-walker.running .leg-b { animation-duration: .12s; }
+
+  /* Estado de abducción del dino */
+  .dino-walker.abducted {
+    transition: transform 1.5s ease-in, opacity 1s ease-in !important;
+    animation: none !important;
+  }
+
+  @keyframes hop {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(-28px); }
+    60% { transform: translateY(-28px); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes legA { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes legB { 0%,49%{opacity:0} 50%,100%{opacity:1} }
+
+  .obstacle {
+    position: absolute;
+    bottom: 2px;
+    width: 24px;
+    height: 28px;
+    background: var(--brass-dim);
+    border: 2px solid var(--brass);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 0 10px rgba(201, 162, 39, 0.2);
+  }
+  .obstacle::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; height: 4px;
+    background: rgba(0,0,0,0.3);
+  }
+  .obstacle.active { opacity: 1; }
+
+  /* Nave Espacial Mejorada */
+  .ufo {
+    position: fixed;
+    width: 70px;
+    height: 50px;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    filter: drop-shadow(0 0 12px rgba(245, 197, 24, 0.6));
+  }
+  .ufo svg { width: 100%; height: 100%; }
+  .ufo .light {
+    animation: blink 0.8s infinite alternate;
+  }
+  .ufo .light:nth-child(2) { animation-delay: 0.2s; }
+  .ufo .light:nth-child(3) { animation-delay: 0.4s; }
+  .ufo .light:nth-child(4) { animation-delay: 0.6s; }
+  .ufo .light:nth-child(5) { animation-delay: 0.8s; }
+  
+  @keyframes blink {
+    from { opacity: 0.3; filter: brightness(0.8); }
+    to { opacity: 1; filter: brightness(1.5); }
+  }
+
+  /* Animación de paso normal (serpenteando hacia atrás y arriba) */
+  .ufo.fly-by {
+    animation: snakeFly 9s linear forwards;
+  }
+  @keyframes snakeFly {
+    0% { top: -60px; left: 110vw; opacity: 0; transform: rotate(0deg) scale(0.8); }
+    10% { top: 12%; left: 90vw; opacity: 0.9; transform: rotate(-2deg) scale(1); }
+    30% { top: 8%; left: 70vw; transform: rotate(4deg) scale(1); }
+    50% { top: 16%; left: 50vw; transform: rotate(-4deg) scale(1); }
+    70% { top: 6%; left: 30vw; transform: rotate(3deg) scale(1); }
+    90% { top: -30px; left: 10vw; opacity: 0.9; transform: rotate(-2deg) scale(0.9); }
+    100% { top: -80px; left: -10vw; opacity: 0; transform: rotate(0deg) scale(0.8); }
+  }
+
+  /* Rayo tractor */
+  .beam {
+    position: fixed;
+    width: 50px;
+    height: 0;
+    background: linear-gradient(180deg, rgba(245, 197, 24, 0.7) 0%, rgba(245, 197, 24, 0) 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    pointer-events: none;
+    z-index: 90;
+    opacity: 0;
+    transition: height 0.8s ease-out, opacity 0.3s;
+  }
+  .beam.active {
+    opacity: 1;
+    animation: beamPulse 0.4s infinite alternate;
+  }
+  @keyframes beamPulse {
+    from { filter: brightness(1) drop-shadow(0 0 8px rgba(245, 197, 24, 0.8)); }
+    to { filter: brightness(1.4) drop-shadow(0 0 15px rgba(245, 197, 24, 1)); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .dino-walker { animation: none; left: 20px; }
+    .dino-walker .leg-a, .dino-walker .leg-b { animation: none; opacity: 1; }
+    .dino-jumper.jumping, .dino-walker.abducted { animation: none; transition: none; }
+    .ufo.fly-by { animation: none; }
   }
 </style>
 </head>
@@ -423,7 +507,6 @@
 
 <header class="hero">
   <div class="wrap">
-
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
         <circle class="dot" cx="20" cy="20" r="9"></circle>
@@ -439,30 +522,6 @@
       <span class="brand-word">Hard<b>Ware</b></span>
     </div>
 
-    <div class="dino-track" aria-hidden="true">
-      <div class="dino-walker" id="dinoWalker">
-        <div class="dino-jumper" id="dinoJumper">
-          <svg viewBox="0 0 34 34" fill="var(--yellow)">
-            <!-- cuerpo / cabeza / cola (fijo) -->
-            <rect x="12" y="4"  width="12" height="6"></rect>
-            <rect x="22" y="7"  width="4"  height="3"></rect>
-            <rect x="8"  y="10" width="16" height="10"></rect>
-            <rect x="2"  y="16" width="8"  height="4"></rect>
-            <!-- pata A -->
-            <g class="leg-a">
-              <rect x="10" y="20" width="4" height="8"></rect>
-              <rect x="19" y="20" width="4" height="6"></rect>
-            </g>
-            <!-- pata B -->
-            <g class="leg-b">
-              <rect x="10" y="20" width="4" height="6"></rect>
-              <rect x="19" y="20" width="4" height="8"></rect>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
-
     <p class="kicker">Lote 01-A · Julio 2026 · Montevideo</p>
     <h1 class="title">Hardware real.<br><span>Cero relato de vendedor.</span></h1>
     <p class="subtitle">Cada pieza se chequeó contra el hardware físico antes de subirse acá. Lo que ves en la ficha es exactamente lo que se entrega.</p>
@@ -474,25 +533,6 @@
     </div>
   </div>
 </header>
-
-<script>
-  (function(){
-    var walker = document.getElementById('dinoWalker');
-    var jumper = document.getElementById('dinoJumper');
-    var toggle = 0;
-    function tick(){
-      toggle = 1 - toggle;
-      if(toggle === 0){
-        walker.classList.add('running');
-        setTimeout(function(){ walker.classList.remove('running'); }, 2600);
-      } else {
-        jumper.classList.add('jumping');
-        setTimeout(function(){ jumper.classList.remove('jumping'); }, 650);
-      }
-    }
-    setInterval(tick, 15000);
-  })();
-</script>
 
 <nav class="catnav">
   <div class="wrap">
@@ -506,14 +546,12 @@
 
 <main class="wrap">
 
-  <!-- ======================= GPU ======================= -->
   <section class="category" id="gpu">
     <div class="cat-head">
       <h2>Placas de video</h2>
       <span class="count">3 ítems · ~65% del valor del lote</span>
     </div>
     <div class="grid">
-
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -582,18 +620,15 @@
           </div>
         </div>
       </article>
-
     </div>
   </section>
 
-  <!-- ======================= MOTHERBOARDS ======================= -->
   <section class="category" id="mb">
     <div class="cat-head">
       <h2>Motherboards</h2>
       <span class="count">3 ítems</span>
     </div>
     <div class="grid">
-
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -662,18 +697,15 @@
           </div>
         </div>
       </article>
-
     </div>
   </section>
 
-  <!-- ======================= CPU ======================= -->
   <section class="category" id="cpu">
     <div class="cat-head">
       <h2>Procesadores</h2>
       <span class="count">2 ítems</span>
     </div>
     <div class="grid">
-
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -718,18 +750,15 @@
           </div>
         </div>
       </article>
-
     </div>
   </section>
 
-  <!-- ======================= RAM ======================= -->
   <section class="category" id="ram">
     <div class="cat-head">
       <h2>Memoria RAM</h2>
       <span class="count">3 ítems</span>
     </div>
     <div class="grid">
-
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -791,18 +820,15 @@
           </div>
         </div>
       </article>
-
     </div>
   </section>
 
-  <!-- ======================= ACCESORIOS ======================= -->
   <section class="category" id="acc">
     <div class="cat-head">
       <h2>Accesorios</h2>
       <span class="count">2 ítems · 7 ventiladores</span>
     </div>
     <div class="grid">
-
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -842,7 +868,6 @@
           </div>
         </div>
       </article>
-
     </div>
   </section>
 
@@ -860,6 +885,56 @@
   </div>
 </footer>
 
+<!-- =========================================
+     MUNDO DEL DINO, NAVE Y RAYO TRACTOR
+     ========================================= -->
+<div class="dino-world">
+  <div class="dino-floor"></div>
+  
+  <div class="dino-walker" id="dinoWalker">
+    <div class="dino-jumper" id="dinoJumper">
+      <svg viewBox="0 0 34 34" fill="var(--yellow)">
+        <rect x="12" y="4"  width="12" height="6"></rect>
+        <rect x="22" y="7"  width="4"  height="3"></rect>
+        <rect x="8"  y="10" width="16" height="10"></rect>
+        <rect x="2"  y="16" width="8"  height="4"></rect>
+        <g class="leg-a">
+          <rect x="10" y="20" width="4" height="8"></rect>
+          <rect x="19" y="20" width="4" height="6"></rect>
+        </g>
+        <g class="leg-b">
+          <rect x="10" y="20" width="4" height="6"></rect>
+          <rect x="19" y="20" width="4" height="8"></rect>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="obstacle" id="obs1" style="left: 30vw;"></div>
+  <div class="obstacle" id="obs2" style="left: 55vw;"></div>
+  <div class="obstacle" id="obs3" style="left: 80vw;"></div>
+</div>
+
+<!-- Nave Espacial con luces de colores -->
+<div class="ufo" id="ufo">
+  <svg viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Cúpula -->
+    <path d="M20 15 C20 5, 40 5, 40 15" fill="#a0aec0" stroke="#718096" stroke-width="1.5"/>
+    <!-- Cuerpo del platillo -->
+    <ellipse cx="30" cy="22" rx="28" ry="10" fill="#e2e8f0" stroke="#718096" stroke-width="1.5"/>
+    <!-- Lucesitas de colores -->
+    <circle class="light" cx="12" cy="22" r="2.5" fill="#ef4444"/>
+    <circle class="light" cx="22" cy="26" r="2.5" fill="#22c55e"/>
+    <circle class="light" cx="30" cy="28" r="2.5" fill="#3b82f6"/>
+    <circle class="light" cx="38" cy="26" r="2.5" fill="#eab308"/>
+    <circle class="light" cx="48" cy="22" r="2.5" fill="#ef4444"/>
+  </svg>
+</div>
+
+<!-- Rayo tractor -->
+<div class="beam" id="beam"></div>
+
+<!-- Lightbox (Intacto) -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar imagen ampliada">✕</button>
   <div class="lightbox-stage" id="lightboxStage">
@@ -875,6 +950,146 @@
 </div>
 
 <script>
+  /* =========================================
+     LÓGICA DEL DINO, OBSTÁCULOS Y ABducción
+     ========================================= */
+  (function(){
+    const dinoWalker = document.getElementById('dinoWalker');
+    const dinoJumper = document.getElementById('dinoJumper');
+    const obstacles = document.querySelectorAll('.obstacle');
+    const ufo = document.getElementById('ufo');
+    const beam = document.getElementById('beam');
+
+    let dinoX = -50;
+    const speed = 1.8;
+    let isJumping = false;
+    let isAbducting = false;
+    let animationId;
+
+    function gameLoop() {
+      if (!isAbducting) {
+        dinoX += speed;
+        dinoWalker.style.left = dinoX + 'px';
+
+        // Saltos en obstáculos
+        if (dinoX > window.innerWidth * 0.30 - 40 && dinoX < window.innerWidth * 0.30 - 30 && !isJumping) triggerJump(0);
+        if (dinoX > window.innerWidth * 0.55 - 40 && dinoX < window.innerWidth * 0.55 - 30 && !isJumping) triggerJump(1);
+        if (dinoX > window.innerWidth * 0.80 - 40 && dinoX < window.innerWidth * 0.80 - 30 && !isJumping) triggerJump(2);
+
+        // Reiniciar ciclo normal
+        if (dinoX > window.innerWidth + 50) {
+          resetDino();
+        }
+      }
+      animationId = requestAnimationFrame(gameLoop);
+    }
+
+    function triggerJump(obsIndex) {
+      isJumping = true;
+      dinoJumper.classList.add('jumping');
+      obstacles[obsIndex].classList.add('active');
+
+      setTimeout(() => {
+        dinoJumper.classList.remove('jumping');
+        obstacles[obsIndex].classList.remove('active');
+        isJumping = false;
+      }, 650);
+    }
+
+    function resetDino() {
+      dinoX = -50;
+      // 35% de probabilidad de abducción al reiniciar el ciclo
+      if (Math.random() > 0.65) {
+        startAbduction();
+      } else {
+        triggerUFOFlyBy();
+      }
+    }
+
+    // --- Secuencia de Abducción ---
+    function startAbduction() {
+      isAbducting = true;
+      dinoWalker.classList.add('abducted');
+      dinoJumper.classList.remove('jumping');
+
+      const dinoRect = dinoWalker.getBoundingClientRect();
+      const targetX = dinoRect.left;
+
+      // 1. Posicionar nave arriba del dino
+      ufo.style.left = (targetX + 5) + 'px';
+      ufo.style.top = '-60px';
+      ufo.style.opacity = '1';
+      ufo.style.transition = 'top 1.2s ease-out, opacity 0.5s';
+      ufo.classList.remove('fly-by');
+
+      setTimeout(() => {
+        ufo.style.top = '50px'; // Nave baja
+      }, 100);
+
+      // 2. Activar rayo y levitar dino
+      setTimeout(() => {
+        beam.style.left = (targetX + 15) + 'px';
+        beam.style.top = '90px';
+        beam.style.height = '0px';
+        beam.style.opacity = '1';
+        
+        beam.offsetHeight; // Forzar reflow
+        beam.style.height = '400px';
+        beam.classList.add('active');
+
+        // El dino sube girando y desvaneciéndose
+        dinoWalker.style.transform = 'translateY(-450px) scale(0.4) rotate(360deg)';
+        dinoWalker.style.opacity = '0';
+      }, 1400);
+
+      // 3. Nave se va serpenteando hacia arriba y atrás
+      setTimeout(() => {
+        ufo.style.transition = 'top 1.5s ease-in, left 1.5s ease-in, opacity 1s';
+        ufo.style.top = '-100px';
+        ufo.style.left = (targetX - 150) + 'px'; // Se va hacia atrás
+      }, 3200);
+
+      // 4. Resetear todo
+      setTimeout(() => {
+        resetAfterAbduction();
+      }, 5000);
+    }
+
+    function resetAfterAbduction() {
+      ufo.style.opacity = '0';
+      ufo.style.transition = '';
+      
+      beam.classList.remove('active');
+      beam.style.height = '0px';
+      beam.style.opacity = '0';
+
+      dinoWalker.classList.remove('abducted');
+      dinoX = -50;
+      dinoWalker.style.left = dinoX + 'px';
+      dinoWalker.style.transform = 'scale(1) rotate(0deg)';
+      dinoWalker.style.opacity = '1';
+      isAbducting = false;
+    }
+
+    // --- Vuelo normal (sin abducción) ---
+    function triggerUFOFlyBy() {
+      ufo.classList.remove('fly-by');
+      void ufo.offsetWidth; // Forzar reflow
+      ufo.classList.add('fly-by');
+    }
+
+    // Iniciar caminata
+    gameLoop();
+
+    // La nave también puede pasar aleatoriamente cada 20 segundos
+    setInterval(() => { 
+      if (!isAbducting && Math.random() > 0.6) triggerUFOFlyBy(); 
+    }, 20000);
+  })();
+
+  /* =========================================
+     LIGHTBOX ORIGINAL (Intacto)
+     ========================================= */
   (function(){
     var lightbox = document.getElementById('lightbox');
     var stage = document.getElementById('lightboxStage');
@@ -947,21 +1162,18 @@
     zoomOutBtn.addEventListener('click', function(){ setScale(scale - 0.6); });
     zoomResetBtn.addEventListener('click', function(){ setScale(1); });
 
-    // rueda del mouse para acercar/alejar
     stage.addEventListener('wheel', function(e){
       e.preventDefault();
       var delta = e.deltaY > 0 ? -0.35 : 0.35;
       setScale(scale + delta);
     }, { passive:false });
 
-    // doble click cicla entre 1x / 2.2x / 4x
     lightboxImg.addEventListener('dblclick', function(){
       if(scale < 1.5) setScale(2.2);
       else if(scale < 3.5) setScale(4);
       else setScale(1);
     });
 
-    // arrastrar para paneo cuando hay zoom (mouse)
     lightboxImg.addEventListener('mousedown', function(e){
       if(scale <= 1.001) return;
       dragging = true;
@@ -982,14 +1194,10 @@
       stage.classList.remove('dragging');
     });
 
-    // pinch-to-zoom táctil
     var touchStartDist = null, touchStartScale = 1;
     stage.addEventListener('touchstart', function(e){
       if(e.touches.length === 2){
-        touchStartDist = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
+        touchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
         touchStartScale = scale;
       } else if(e.touches.length === 1 && scale > 1.001){
         dragging = true;
@@ -999,10 +1207,7 @@
     }, { passive:true });
     stage.addEventListener('touchmove', function(e){
       if(e.touches.length === 2 && touchStartDist){
-        var dist = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
+        var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
         setScale(touchStartScale * (dist / touchStartDist));
       } else if(e.touches.length === 1 && dragging){
         posX = startPosX + (e.touches[0].clientX - startX);
