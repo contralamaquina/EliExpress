@@ -23,7 +23,8 @@
     --amber: #D98E3B;
     --line: #33373D;
     --radius: 4px;
-    --whatsapp: #25D366;
+    --penguin-pink: #FF69B4;
+    --penguin-green: #4FBDB4;
   }
 
   *{box-sizing:border-box;}
@@ -37,22 +38,7 @@
     color:var(--ink);
     font-family:'Inter', sans-serif;
     -webkit-font-smoothing:antialiased;
-    padding-bottom: 60px;
-    position: relative;
   }
-
-  /* Canvas de circuito de fondo */
-  #circuitCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.4;
-    pointer-events: none;
-  }
-
   h1,h2,h3, .display{
     font-family:'Rajdhani', sans-serif;
     text-transform:uppercase;
@@ -61,7 +47,7 @@
   .mono{ font-family:'JetBrains Mono', monospace; }
   a{ color:inherit; }
 
-  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; position: relative; z-index: 1; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
 
   header.hero{
     border-bottom:1px solid var(--line);
@@ -85,6 +71,133 @@
     color:var(--ink);
   }
   .brand-word b{ color:var(--yellow); font-weight:700; }
+
+  /* PENGUIN TRACK */
+  .penguin-track{
+    position:relative;
+    height:100px;
+    margin-bottom:34px;
+    overflow:hidden;
+    background: linear-gradient(180deg, rgba(30,33,38,0.6) 0%, rgba(21,23,27,0.8) 100%);
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .penguin-track::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:25px;
+    height:2px;
+    background: linear-gradient(90deg, transparent, var(--line), transparent);
+  }
+  
+  .penguin{
+    position:absolute; 
+    bottom:20px;
+    width:45px; 
+    height:50px;
+    z-index: 5;
+  }
+  
+  .penguin-left{
+    left: -60px;
+    animation: penguinLeftWalk 12s ease-in-out infinite;
+  }
+  
+  .penguin-right{
+    right: -60px;
+    animation: penguinRightWalk 12s ease-in-out infinite;
+  }
+  
+  .penguin svg{ 
+    width:100%; 
+    height:100%; 
+    overflow:visible; 
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); 
+  }
+  
+  /* Corazón */
+  .heart {
+    position: absolute;
+    bottom: 75px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 50px;
+    height: 50px;
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .heart.show {
+    animation: heartBeat 1.5s ease-in-out;
+  }
+  
+  @keyframes heartBeat {
+    0% { transform: translateX(-50%) scale(0); opacity: 0; }
+    30% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+    50% { transform: translateX(-50%) scale(1); opacity: 1; }
+    70% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+    100% { transform: translateX(-50%) scale(0); opacity: 0; }
+  }
+  
+  .heart svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.8));
+  }
+
+  @keyframes penguinLeftWalk {
+    0% { left: -60px; transform: scaleX(1); }
+    35% { left: calc(50% - 55px); transform: scaleX(1); }
+    50% { left: calc(50% - 55px); transform: scaleX(1); }
+    85% { left: calc(50% - 55px); transform: scaleX(1); }
+    100% { left: -60px; transform: scaleX(1); }
+  }
+  
+  @keyframes penguinRightWalk {
+    0% { right: -60px; transform: scaleX(1); }
+    35% { right: calc(50% - 55px); transform: scaleX(1); }
+    50% { right: calc(50% - 55px); transform: scaleX(1); }
+    85% { right: calc(50% - 55px); transform: scaleX(1); }
+    100% { right: -60px; transform: scaleX(1); }
+  }
+  
+  /* Waddle animation */
+  .penguin-left.waddle, .penguin-right.waddle {
+    animation: waddleLeft 0.4s ease-in-out infinite;
+  }
+  
+  .penguin-right.waddle {
+    animation: waddleRight 0.4s ease-in-out infinite;
+  }
+  
+  @keyframes waddleLeft {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+  
+  @keyframes waddleRight {
+    0%, 100% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+  }
+  
+  /* Kiss moment */
+  .penguin-left.kissing {
+    animation: kissLeft 0.5s ease-in-out;
+  }
+  
+  .penguin-right.kissing {
+    animation: kissRight 0.5s ease-in-out;
+  }
+  
+  @keyframes kissLeft {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+  
+  @keyframes kissRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-5px); }
+  }
 
   .kicker{
     font-family:'JetBrains Mono', monospace;
@@ -337,7 +450,6 @@
     gap:10px;
     border-top:1px solid var(--line);
     padding-top:14px;
-    flex-wrap:wrap;
   }
   .price{
     font-family:'JetBrains Mono', monospace;
@@ -361,30 +473,6 @@
   }
   .official-link:hover{ background:rgba(79,189,180,.12); }
 
-  .whatsapp-link{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:.68rem;
-    text-decoration:none;
-    color:var(--whatsapp);
-    border:1px solid rgba(37,211,102,.4);
-    padding:7px 10px;
-    border-radius:2px;
-    white-space:nowrap;
-    transition:background .15s ease, border-color .15s ease;
-  }
-  .whatsapp-link:hover{ 
-    background:rgba(37,211,102,.12); 
-    border-color:rgba(37,211,102,.7);
-  }
-  .whatsapp-link svg{
-    width:14px;
-    height:14px;
-    fill:currentColor;
-  }
-
   footer{
     margin-top:70px;
     border-top:1px solid var(--line);
@@ -403,145 +491,15 @@
 
   @media (max-width:640px){
     .stats-strip .sep{ margin:0 10px; }
-  }
-
-  .dino-world {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    pointer-events: none;
-    z-index: 45;
-    overflow: hidden;
-  }
-  .dino-floor {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--line), transparent);
-  }
-  
-  .dino-walker {
-    position: absolute;
-    bottom: 2px;
-    left: -50px;
-    width: 40px;
-    height: 40px;
-    will-change: transform;
-  }
-  .dino-jumper { width: 100%; height: 100%; }
-  .dino-jumper.jumping { animation: hop .6s ease-out; }
-  .dino-walker svg { width: 100%; height: 100%; overflow: visible; }
-  .dino-walker .leg-a { animation: legA .3s steps(1) infinite; transform-origin: 20px 34px; }
-  .dino-walker .leg-b { animation: legB .3s steps(1) infinite; transform-origin: 20px 34px; }
-  .dino-walker.running .leg-a, .dino-walker.running .leg-b { animation-duration: .12s; }
-
-  .dino-walker.abducted {
-    transition: transform 1.5s ease-in, opacity 1s ease-in !important;
-    animation: none !important;
-  }
-
-  @keyframes hop {
-    0% { transform: translateY(0); }
-    35% { transform: translateY(-28px); }
-    60% { transform: translateY(-28px); }
-    100% { transform: translateY(0); }
-  }
-  @keyframes legA { 0%,49%{opacity:1} 50%,100%{opacity:0} }
-  @keyframes legB { 0%,49%{opacity:0} 50%,100%{opacity:1} }
-
-  .obstacle {
-    position: absolute;
-    bottom: 2px;
-    width: 24px;
-    height: 28px;
-    background: var(--brass-dim);
-    border: 2px solid var(--brass);
-    border-radius: 2px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    box-shadow: 0 0 10px rgba(201, 162, 39, 0.2);
-  }
-  .obstacle::before {
-    content: '';
-    position: absolute;
-    top: 4px; left: 4px; right: 4px; height: 4px;
-    background: rgba(0,0,0,0.3);
-  }
-  .obstacle.active { opacity: 1; }
-
-  .ufo {
-    position: fixed;
-    width: 70px;
-    height: 50px;
-    pointer-events: none;
-    z-index: 100;
-    opacity: 0;
-    filter: drop-shadow(0 0 12px rgba(245, 197, 24, 0.6));
-  }
-  .ufo svg { width: 100%; height: 100%; }
-  .ufo .light {
-    animation: blink 0.8s infinite alternate;
-  }
-  .ufo .light:nth-child(2) { animation-delay: 0.2s; }
-  .ufo .light:nth-child(3) { animation-delay: 0.4s; }
-  .ufo .light:nth-child(4) { animation-delay: 0.6s; }
-  .ufo .light:nth-child(5) { animation-delay: 0.8s; }
-  
-  @keyframes blink {
-    from { opacity: 0.3; filter: brightness(0.8); }
-    to { opacity: 1; filter: brightness(1.5); }
-  }
-
-  .ufo.fly-by {
-    animation: snakeFly 9s linear forwards;
-  }
-  @keyframes snakeFly {
-    0% { top: -60px; left: 110vw; opacity: 0; transform: rotate(0deg) scale(0.8); }
-    10% { top: 12%; left: 90vw; opacity: 0.9; transform: rotate(-2deg) scale(1); }
-    30% { top: 8%; left: 70vw; transform: rotate(4deg) scale(1); }
-    50% { top: 16%; left: 50vw; transform: rotate(-4deg) scale(1); }
-    70% { top: 6%; left: 30vw; transform: rotate(3deg) scale(1); }
-    90% { top: -30px; left: 10vw; opacity: 0.9; transform: rotate(-2deg) scale(0.9); }
-    100% { top: -80px; left: -10vw; opacity: 0; transform: rotate(0deg) scale(0.8); }
-  }
-
-  .beam {
-    position: fixed;
-    width: 50px;
-    height: 0;
-    background: linear-gradient(180deg, rgba(245, 197, 24, 0.7) 0%, rgba(245, 197, 24, 0) 100%);
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-    pointer-events: none;
-    z-index: 90;
-    opacity: 0;
-    transition: height 0.8s ease-out, opacity 0.3s;
-  }
-  .beam.active {
-    opacity: 1;
-    animation: beamPulse 0.4s infinite alternate;
-  }
-  @keyframes beamPulse {
-    from { filter: brightness(1) drop-shadow(0 0 8px rgba(245, 197, 24, 0.8)); }
-    to { filter: brightness(1.4) drop-shadow(0 0 15px rgba(245, 197, 24, 1)); }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .dino-walker { animation: none; left: 20px; }
-    .dino-walker .leg-a, .dino-walker .leg-b { animation: none; opacity: 1; }
-    .dino-jumper.jumping, .dino-walker.abducted { animation: none; transition: none; }
-    .ufo.fly-by { animation: none; }
+    .penguin-track{ height:100px; }
   }
 </style>
 </head>
 <body>
 
-<canvas id="circuitCanvas"></canvas>
-
 <header class="hero">
   <div class="wrap">
+
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
         <circle class="dot" cx="20" cy="20" r="9"></circle>
@@ -557,6 +515,47 @@
       <span class="brand-word">Hard<b>Ware</b></span>
     </div>
 
+    <div class="penguin-track" aria-hidden="true">
+      <div class="penguin penguin-left" id="penguinLeft">
+        <svg viewBox="0 0 45 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Penguin Pink (Female) -->
+          <ellipse cx="22.5" cy="35" rx="18" ry="14" fill="#FF69B4"/>
+          <ellipse cx="22.5" cy="20" rx="14" ry="16" fill="#FFB6C1"/>
+          <ellipse cx="22.5" cy="22" rx="10" ry="11" fill="#FFFFFF"/>
+          <circle cx="18" cy="16" r="3" fill="#1a1c20"/>
+          <circle cx="27" cy="16" r="3" fill="#1a1c20"/>
+          <circle cx="19" cy="15" r="1" fill="#FFFFFF"/>
+          <circle cx="28" cy="15" r="1" fill="#FFFFFF"/>
+          <ellipse cx="22.5" cy="22" rx="5" ry="3" fill="#FFA500"/>
+          <ellipse cx="12" cy="38" rx="4" ry="6" fill="#FFA500"/>
+          <ellipse cx="33" cy="38" rx="4" ry="6" fill="#FFA500"/>
+          <!-- Bow -->
+          <path d="M22.5 8 L18 4 L18 10 Z" fill="#FF1493"/>
+          <path d="M22.5 8 L27 4 L27 10 Z" fill="#FF1493"/>
+        </svg>
+      </div>
+      <div class="penguin penguin-right" id="penguinRight">
+        <svg viewBox="0 0 45 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Penguin Green (Male) -->
+          <ellipse cx="22.5" cy="35" rx="18" ry="14" fill="#4FBDB4"/>
+          <ellipse cx="22.5" cy="20" rx="14" ry="16" fill="#7FD4CC"/>
+          <ellipse cx="22.5" cy="22" rx="10" ry="11" fill="#FFFFFF"/>
+          <circle cx="18" cy="16" r="3" fill="#1a1c20"/>
+          <circle cx="27" cy="16" r="3" fill="#1a1c20"/>
+          <circle cx="19" cy="15" r="1" fill="#FFFFFF"/>
+          <circle cx="28" cy="15" r="1" fill="#FFFFFF"/>
+          <ellipse cx="22.5" cy="22" rx="5" ry="3" fill="#FFA500"/>
+          <ellipse cx="12" cy="38" rx="4" ry="6" fill="#FFA500"/>
+          <ellipse cx="33" cy="38" rx="4" ry="6" fill="#FFA500"/>
+        </svg>
+      </div>
+      <div class="heart" id="heart">
+        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 45 C25 45 5 30 5 15 C5 8 11 3 18 3 C22 3 25 6 25 10 C25 6 28 3 32 3 C39 3 45 8 45 15 C45 30 25 45 25 45 Z" fill="#FF69B4"/>
+        </svg>
+      </div>
+    </div>
+
     <p class="kicker">Lote 01-A · Julio 2026 · Montevideo</p>
     <h1 class="title">Hardware real.<br><span>Cero relato de vendedor.</span></h1>
     <p class="subtitle">Cada pieza se chequeó contra el hardware físico antes de subirse acá. Lo que ves en la ficha es exactamente lo que se entrega.</p>
@@ -568,6 +567,55 @@
     </div>
   </div>
 </header>
+
+<script>
+  (function(){
+    var penguinLeft = document.getElementById('penguinLeft');
+    var penguinRight = document.getElementById('penguinRight');
+    var heart = document.getElementById('heart');
+    
+    var state = 'walking';
+    
+    function triggerPenguinKiss() {
+      if (state !== 'walking') return;
+      state = 'meeting';
+      
+      // Add waddle animation
+      penguinLeft.classList.add('waddle');
+      penguinRight.classList.add('waddle');
+      
+      // Wait until they meet in the middle (at 35% of animation = ~4.2s)
+      setTimeout(function() {
+        // Remove waddle
+        penguinLeft.classList.remove('waddle');
+        penguinRight.classList.remove('waddle');
+        
+        // Add kiss animation
+        penguinLeft.classList.add('kissing');
+        penguinRight.classList.add('kissing');
+        
+        // Show heart
+        heart.classList.add('show');
+        
+        // Remove kiss after animation
+        setTimeout(function() {
+          penguinLeft.classList.remove('kissing');
+          penguinRight.classList.remove('kissing');
+          heart.classList.remove('show');
+          
+          state = 'walking';
+        }, 1500);
+        
+      }, 4200);
+    }
+    
+    // Start the cycle
+    setInterval(triggerPenguinKiss, 12000);
+    
+    // First execution
+    setTimeout(triggerPenguinKiss, 1000);
+  })();
+</script>
 
 <nav class="catnav">
   <div class="wrap">
@@ -587,6 +635,7 @@
       <span class="count">3 ítems · ~65% del valor del lote</span>
     </div>
     <div class="grid">
+
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -605,10 +654,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 950<small>Referencia Aslan / Laaca</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20XFX%20Radeon%20RX%209070%20XT%20Quicksilver%2016GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.xfxforce.com/shop/xfx-quicksilver-amd-radeon-rx-9070xt-gaming-edition" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -632,10 +677,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 799<small>Mismo part number, Aslan UY</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20Gigabyte%20RX%207800%20XT%20Gaming%20OC%2016GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.gigabyte.com/Graphics-Card/GV-R78XTGAMING-OC-16GD" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -659,14 +700,11 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 800<small>Vs. MSI Ventus / Zotac Solid</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20PNY%20GeForce%20RTX%205070%20OC%2012GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.pny.com/geforce-rtx-5070-models" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
+
     </div>
   </section>
 
@@ -676,6 +714,7 @@
       <span class="count">3 ítems</span>
     </div>
     <div class="grid">
+
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -694,10 +733,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 180<small>Mismo modelo, Newtek</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20Gigabyte%20B840M%20DS3H%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.gigabyte.com/Motherboard/B840M-DS3H-rev-10" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -721,10 +756,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 220<small>Sin publicación local</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20MSI%20PRO%20B650M-P%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.msi.com/Motherboard/PRO-B650M-P" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -748,14 +779,11 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 249<small>Mismo modelo, PC Store</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20ASRock%20B550M-HDV%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.asrock.com/mb/AMD/B550M-HDV/" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
+
     </div>
   </section>
 
@@ -765,6 +793,7 @@
       <span class="count">2 ítems</span>
     </div>
     <div class="grid">
+
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -783,10 +812,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 290<small>Precio suelto, sin combo local</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20AMD%20Ryzen%207%205700X%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -809,14 +834,11 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 30<small>Sin listado en UY</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20AMD%20Athlon%20X4%20950%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
-            <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Buscar ficha ↗</a>
+            <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Buscar ficha </a>
           </div>
         </div>
       </article>
+
     </div>
   </section>
 
@@ -826,6 +848,7 @@
       <span class="count">3 ítems</span>
     </div>
     <div class="grid">
+
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -842,10 +865,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 430<small>Ítem de mayor peso a confirmar</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20Kingston%20FURY%20Beast%20DDR5%2064GB%20kit%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.kingston.com/en/memory/gaming/kingston-fury-beast-ddr5-rgb-memory" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -867,11 +886,7 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 110<small>No listado en tiendas UY</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20KingBank%20SharpBlade%20DDR5%2016GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
-            <a class="official-link" href="https://kingbank.com/" target="_blank" rel="noopener">Sitio del fabricante ↗</a>
+            <a class="official-link" href="https://kingbank.com/" target="_blank" rel="noopener">Sitio del fabricante </a>
           </div>
         </div>
       </article>
@@ -891,14 +906,11 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 50<small>Patrón de mercado</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20Samsung%20DDR4%20(2%20m%C3%B3dulos)%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <span class="official-link" style="opacity:.4; pointer-events:none;">Sin ficha específica</span>
           </div>
         </div>
       </article>
+
     </div>
   </section>
 
@@ -908,6 +920,7 @@
       <span class="count">2 ítems · 7 ventiladores</span>
     </div>
     <div class="grid">
+
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
@@ -923,10 +936,6 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 50<small>Las 5 unidades</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesan%20los%20Ventiladores%20DeepCool%20CF120%20(x5)%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
             <a class="official-link" href="https://www.deepcool.com/products/Cooling/fans/CF120-RGB-PWM-Fan-Single/2021/11469.shtml" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
@@ -947,14 +956,11 @@
           </ul>
           <div class="card-foot">
             <div class="price">US$ 35<small>Las 2 unidades</small></div>
-            <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesan%20los%20Ventiladores%20Nox%20Hummer%20Fan%20Series%20(x2)%20del%20Lote%2001-A" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Pedir
-            </a>
-            <a class="official-link" href="https://www.nox-xtreme.com/refrigeracion/s-fan" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
+            <a class="official-link" href="https://www.nox-xtreme.com/refrigeracion/s-fan" target="_blank" rel="noopener">Ver ficha oficial </a>
           </div>
         </div>
       </article>
+
     </div>
   </section>
 
@@ -972,47 +978,6 @@
   </div>
 </footer>
 
-<div class="dino-world">
-  <div class="dino-floor"></div>
-  
-  <div class="dino-walker" id="dinoWalker">
-    <div class="dino-jumper" id="dinoJumper">
-      <svg viewBox="0 0 34 34" fill="var(--yellow)">
-        <rect x="12" y="4"  width="12" height="6"></rect>
-        <rect x="22" y="7"  width="4"  height="3"></rect>
-        <rect x="8"  y="10" width="16" height="10"></rect>
-        <rect x="2"  y="16" width="8"  height="4"></rect>
-        <g class="leg-a">
-          <rect x="10" y="20" width="4" height="8"></rect>
-          <rect x="19" y="20" width="4" height="6"></rect>
-        </g>
-        <g class="leg-b">
-          <rect x="10" y="20" width="4" height="6"></rect>
-          <rect x="19" y="20" width="4" height="8"></rect>
-        </g>
-      </svg>
-    </div>
-  </div>
-
-  <div class="obstacle" id="obs1" style="left: 30vw;"></div>
-  <div class="obstacle" id="obs2" style="left: 55vw;"></div>
-  <div class="obstacle" id="obs3" style="left: 80vw;"></div>
-</div>
-
-<div class="ufo" id="ufo">
-  <svg viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 15 C20 5, 40 5, 40 15" fill="#a0aec0" stroke="#718096" stroke-width="1.5"/>
-    <ellipse cx="30" cy="22" rx="28" ry="10" fill="#e2e8f0" stroke="#718096" stroke-width="1.5"/>
-    <circle class="light" cx="12" cy="22" r="2.5" fill="#ef4444"/>
-    <circle class="light" cx="22" cy="26" r="2.5" fill="#22c55e"/>
-    <circle class="light" cx="30" cy="28" r="2.5" fill="#3b82f6"/>
-    <circle class="light" cx="38" cy="26" r="2.5" fill="#eab308"/>
-    <circle class="light" cx="48" cy="22" r="2.5" fill="#ef4444"/>
-  </svg>
-</div>
-
-<div class="beam" id="beam"></div>
-
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar imagen ampliada">✕</button>
   <div class="lightbox-stage" id="lightboxStage">
@@ -1023,304 +988,11 @@
     <button id="zoomOut" aria-label="Alejar">−</button>
     <span class="zoom-level" id="zoomLevel">100%</span>
     <button id="zoomIn" aria-label="Acercar">+</button>
-    <button id="zoomReset" aria-label="Restablecer zoom" title="Restablecer">⤾</button>
+    <button id="zoomReset" aria-label="Restablecer zoom" title="Restablecer"></button>
   </div>
 </div>
 
 <script>
-  // =========================================
-  // CIRCUITO DE FONDO ANIMADO
-  // =========================================
-  (function() {
-    const canvas = document.getElementById('circuitCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    let width, height;
-    let nodes = [];
-    let traces = [];
-    let chips = [];
-    let pulses = [];
-    
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initCircuit();
-    }
-    
-    function initCircuit() {
-      nodes = [];
-      traces = [];
-      chips = [];
-      
-      // Crear nodos (puntos de conexión)
-      for (let i = 0; i < 80; i++) {
-        nodes.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 2 + 1,
-          brightness: Math.random()
-        });
-      }
-      
-      // Crear trazas (líneas de circuito)
-      for (let i = 0; i < 60; i++) {
-        const startNode = nodes[Math.floor(Math.random() * nodes.length)];
-        const endNode = nodes[Math.floor(Math.random() * nodes.length)];
-        
-        if (startNode !== endNode) {
-          traces.push({
-            x1: startNode.x,
-            y1: startNode.y,
-            x2: endNode.x,
-            y2: endNode.y,
-            width: Math.random() * 1.5 + 0.5
-          });
-        }
-      }
-      
-      // Crear chips (centrales como puente norte/sur)
-      for (let i = 0; i < 5; i++) {
-        chips.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          width: Math.random() * 40 + 30,
-          height: Math.random() * 30 + 20,
-          glow: 0,
-          glowTarget: 0,
-          nextGlow: Math.random() * 5000 + 3000
-        });
-      }
-    }
-    
-    function drawCircuit() {
-      ctx.clearRect(0, 0, width, height);
-      
-      // Dibujar trazas
-      ctx.strokeStyle = 'rgba(100, 100, 100, 0.15)';
-      traces.forEach(trace => {
-        ctx.lineWidth = trace.width;
-        ctx.beginPath();
-        ctx.moveTo(trace.x1, trace.y1);
-        ctx.lineTo(trace.x2, trace.y2);
-        ctx.stroke();
-      });
-      
-      // Dibujar nodos
-      nodes.forEach(node => {
-        const alpha = 0.2 + node.brightness * 0.3;
-        ctx.fillStyle = `rgba(150, 150, 150, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      
-      // Dibujar chips
-      chips.forEach(chip => {
-        // Actualizar brillo
-        chip.glow += (chip.glowTarget - chip.glow) * 0.05;
-        
-        if (Math.random() < 0.002) {
-          chip.glowTarget = Math.random() > 0.5 ? 1 : 0;
-        }
-        
-        // Dibujar chip
-        ctx.fillStyle = `rgba(40, 40, 40, 0.6)`;
-        ctx.fillRect(chip.x - chip.width/2, chip.y - chip.height/2, chip.width, chip.height);
-        
-        // Borde del chip
-        ctx.strokeStyle = `rgba(80, 80, 80, 0.4)`;
-        ctx.lineWidth = 1;
-        ctx.strokeRect(chip.x - chip.width/2, chip.y - chip.height/2, chip.width, chip.height);
-        
-        // Brillo rojo si está activo
-        if (chip.glow > 0.1) {
-          const gradient = ctx.createRadialGradient(
-            chip.x, chip.y, 0,
-            chip.x, chip.y, chip.width
-          );
-          gradient.addColorStop(0, `rgba(220, 50, 50, ${chip.glow * 0.4})`);
-          gradient.addColorStop(1, 'rgba(220, 50, 50, 0)');
-          
-          ctx.fillStyle = gradient;
-          ctx.fillRect(chip.x - chip.width, chip.y - chip.height, chip.width * 2, chip.height * 2);
-          
-          // LED indicador
-          ctx.fillStyle = `rgba(255, 80, 80, ${chip.glow})`;
-          ctx.beginPath();
-          ctx.arc(chip.x + chip.width/2 - 5, chip.y - chip.height/2 + 5, 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      });
-      
-      // Dibujar pulsos (señales viajando)
-      pulses = pulses.filter(pulse => pulse.progress < 1);
-      pulses.forEach(pulse => {
-        pulse.progress += 0.008;
-        
-        const x = pulse.x1 + (pulse.x2 - pulse.x1) * pulse.progress;
-        const y = pulse.y1 + (pulse.y2 - pulse.y1) * pulse.progress;
-        
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, 8);
-        gradient.addColorStop(0, 'rgba(255, 100, 100, 0.8)');
-        gradient.addColorStop(1, 'rgba(255, 100, 100, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(x, y, 8, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      
-      // Crear nuevos pulsos aleatoriamente
-      if (Math.random() < 0.02 && traces.length > 0) {
-        const trace = traces[Math.floor(Math.random() * traces.length)];
-        pulses.push({
-          x1: trace.x1,
-          y1: trace.y1,
-          x2: trace.x2,
-          y2: trace.y2,
-          progress: 0
-        });
-      }
-    }
-    
-    function animate() {
-      drawCircuit();
-      requestAnimationFrame(animate);
-    }
-    
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
-  })();
-
-  // =========================================
-  // LÓGICA DEL DINO Y NAVE (código anterior intacto)
-  // =========================================
-  (function(){
-    const dinoWalker = document.getElementById('dinoWalker');
-    const dinoJumper = document.getElementById('dinoJumper');
-    const obstacles = document.querySelectorAll('.obstacle');
-    const ufo = document.getElementById('ufo');
-    const beam = document.getElementById('beam');
-
-    let dinoX = -50;
-    const speed = 1.8;
-    let isJumping = false;
-    let isAbducting = false;
-    let animationId;
-
-    function gameLoop() {
-      if (!isAbducting) {
-        dinoX += speed;
-        dinoWalker.style.left = dinoX + 'px';
-
-        if (dinoX > window.innerWidth * 0.30 - 40 && dinoX < window.innerWidth * 0.30 - 30 && !isJumping) triggerJump(0);
-        if (dinoX > window.innerWidth * 0.55 - 40 && dinoX < window.innerWidth * 0.55 - 30 && !isJumping) triggerJump(1);
-        if (dinoX > window.innerWidth * 0.80 - 40 && dinoX < window.innerWidth * 0.80 - 30 && !isJumping) triggerJump(2);
-
-        if (dinoX > window.innerWidth + 50) {
-          resetDino();
-        }
-      }
-      animationId = requestAnimationFrame(gameLoop);
-    }
-
-    function triggerJump(obsIndex) {
-      isJumping = true;
-      dinoJumper.classList.add('jumping');
-      obstacles[obsIndex].classList.add('active');
-
-      setTimeout(() => {
-        dinoJumper.classList.remove('jumping');
-        obstacles[obsIndex].classList.remove('active');
-        isJumping = false;
-      }, 650);
-    }
-
-    function resetDino() {
-      dinoX = -50;
-      if (Math.random() > 0.65) {
-        startAbduction();
-      } else {
-        triggerUFOFlyBy();
-      }
-    }
-
-    function startAbduction() {
-      isAbducting = true;
-      dinoWalker.classList.add('abducted');
-      dinoJumper.classList.remove('jumping');
-
-      const dinoRect = dinoWalker.getBoundingClientRect();
-      const targetX = dinoRect.left;
-
-      ufo.style.left = (targetX + 5) + 'px';
-      ufo.style.top = '-60px';
-      ufo.style.opacity = '1';
-      ufo.style.transition = 'top 1.2s ease-out, opacity 0.5s';
-      ufo.classList.remove('fly-by');
-
-      setTimeout(() => {
-        ufo.style.top = '50px';
-      }, 100);
-
-      setTimeout(() => {
-        beam.style.left = (targetX + 15) + 'px';
-        beam.style.top = '90px';
-        beam.style.height = '0px';
-        beam.style.opacity = '1';
-        
-        beam.offsetHeight;
-        beam.style.height = '400px';
-        beam.classList.add('active');
-
-        dinoWalker.style.transform = 'translateY(-450px) scale(0.4) rotate(360deg)';
-        dinoWalker.style.opacity = '0';
-      }, 1400);
-
-      setTimeout(() => {
-        ufo.style.transition = 'top 1.5s ease-in, left 1.5s ease-in, opacity 1s';
-        ufo.style.top = '-100px';
-        ufo.style.left = (targetX - 150) + 'px';
-      }, 3200);
-
-      setTimeout(() => {
-        resetAfterAbduction();
-      }, 5000);
-    }
-
-    function resetAfterAbduction() {
-      ufo.style.opacity = '0';
-      ufo.style.transition = '';
-      
-      beam.classList.remove('active');
-      beam.style.height = '0px';
-      beam.style.opacity = '0';
-
-      dinoWalker.classList.remove('abducted');
-      dinoX = -50;
-      dinoWalker.style.left = dinoX + 'px';
-      dinoWalker.style.transform = 'scale(1) rotate(0deg)';
-      dinoWalker.style.opacity = '1';
-      isAbducting = false;
-    }
-
-    function triggerUFOFlyBy() {
-      ufo.classList.remove('fly-by');
-      void ufo.offsetWidth;
-      ufo.classList.add('fly-by');
-    }
-
-    gameLoop();
-
-    setInterval(() => { 
-      if (!isAbducting && Math.random() > 0.6) triggerUFOFlyBy(); 
-    }, 20000);
-  })();
-
-  // =========================================
-  // LIGHTBOX (código anterior intacto)
-  // =========================================
   (function(){
     var lightbox = document.getElementById('lightbox');
     var stage = document.getElementById('lightboxStage');
@@ -1428,7 +1100,10 @@
     var touchStartDist = null, touchStartScale = 1;
     stage.addEventListener('touchstart', function(e){
       if(e.touches.length === 2){
-        touchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        touchStartDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
         touchStartScale = scale;
       } else if(e.touches.length === 1 && scale > 1.001){
         dragging = true;
@@ -1438,7 +1113,10 @@
     }, { passive:true });
     stage.addEventListener('touchmove', function(e){
       if(e.touches.length === 2 && touchStartDist){
-        var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        var dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
         setScale(touchStartScale * (dist / touchStartDist));
       } else if(e.touches.length === 1 && dragging){
         posX = startPosX + (e.touches[0].clientX - startX);
