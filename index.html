@@ -41,7 +41,6 @@
     position: relative;
   }
 
-  /* Canvas de circuito de fondo */
   #circuitCanvas {
     position: fixed;
     top: 0;
@@ -297,20 +296,6 @@
   }
   .placeholder-ph svg{ opacity:.35; }
 
-  .tag{
-    position:absolute; top:10px; left:10px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:.62rem;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    padding:3px 8px;
-    border-radius:2px;
-    z-index:2;
-  }
-  .tag.confirmado{ background:rgba(79,189,180,.15); color:var(--teal); border:1px solid rgba(79,189,180,.4); }
-  .tag.equivalente{ background:rgba(201,162,39,.15); color:var(--brass); border:1px solid rgba(201,162,39,.4); }
-  .tag.estimado{ background:rgba(217,142,59,.15); color:var(--amber); border:1px solid rgba(217,142,59,.4); }
-
   .card-body{ padding:18px 18px 20px; display:flex; flex-direction:column; gap:12px; flex:1; }
   .card-body h3{
     font-size:1.15rem;
@@ -345,21 +330,6 @@
     font-size:1.02rem;
     font-weight:700;
   }
-  .price small{
-    display:block; color:var(--ink-dim); font-weight:400; font-size:.66rem; text-transform:uppercase; letter-spacing:.06em;
-  }
-  .official-link{
-    font-family:'JetBrains Mono', monospace;
-    font-size:.68rem;
-    text-decoration:none;
-    color:var(--teal);
-    border:1px solid rgba(79,189,180,.4);
-    padding:7px 10px;
-    border-radius:2px;
-    white-space:nowrap;
-    transition:background .15s ease;
-  }
-  .official-link:hover{ background:rgba(79,189,180,.12); }
 
   .whatsapp-link{
     display:inline-flex;
@@ -390,14 +360,6 @@
     border-top:1px solid var(--line);
     padding:40px 0 60px;
   }
-  .legend{
-    display:flex; gap:26px; flex-wrap:wrap;
-    font-family:'JetBrains Mono', monospace;
-    font-size:.74rem;
-    color:var(--ink-dim);
-    margin-bottom:22px;
-  }
-  .legend b{ color:var(--ink); }
   footer p{ color:var(--ink-dim); font-size:.85rem; line-height:1.6; max-width:70ch; }
   footer .source-note{ font-size:.74rem; color:#6b7078; margin-top:18px; }
 
@@ -584,13 +546,12 @@
   <section class="category" id="gpu">
     <div class="cat-head">
       <h2>Placas de video</h2>
-      <span class="count">3 ítems · ~65% del valor del lote</span>
+      <span class="count">3 ítems</span>
     </div>
     <div class="grid">
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag equivalente">Equivalente</span>
           <img src="video1.webp" alt="XFX Radeon RX 9070 XT Quicksilver 16GB"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=2 y=7 width=20 height=10 rx=1.5/><circle cx=7 cy=12 r=2.4/><circle cx=13 cy=12 r=2.4/></svg><span>video1.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -604,12 +565,11 @@
             <li>3 fans, perfil 3.5 slots · PSU 800W+</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 950<small>Referencia Aslan / Laaca</small></div>
+            <div class="price">US$ 950</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20XFX%20Radeon%20RX%209070%20XT%20Quicksilver%2016GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.xfxforce.com/shop/xfx-quicksilver-amd-radeon-rx-9070xt-gaming-edition" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -617,7 +577,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag confirmado">Confirmado</span>
           <img src="video2.webp" alt="Gigabyte RX 7800 XT Gaming OC 16GB"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=2 y=7 width=20 height=10 rx=1.5/><circle cx=7 cy=12 r=2.4/><circle cx=13 cy=12 r=2.4/></svg><span>video2.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -631,12 +590,11 @@
             <li>WINDFORCE 3 fans · backplate metálico</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 799<small>Mismo part number, Aslan UY</small></div>
+            <div class="price">US$ 799</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20Gigabyte%20RX%207800%20XT%20Gaming%20OC%2016GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.gigabyte.com/Graphics-Card/GV-R78XTGAMING-OC-16GD" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -644,7 +602,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag equivalente">Equivalente</span>
           <img src="video3.webp" alt="PNY GeForce RTX 5070 OC 12GB"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=2 y=7 width=20 height=10 rx=1.5/><circle cx=7 cy=12 r=2.4/><circle cx=13 cy=12 r=2.4/></svg><span>video3.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -658,12 +615,11 @@
             <li>Variante OC confirmada por etiqueta · PSU 650W</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 800<small>Vs. MSI Ventus / Zotac Solid</small></div>
+            <div class="price">US$ 800</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20PNY%20GeForce%20RTX%205070%20OC%2012GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.pny.com/geforce-rtx-5070-models" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -679,7 +635,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag confirmado">Confirmado</span>
           <img src="motherboard1.webp" alt="Gigabyte B840M DS3H"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=3 width=18 height=18 rx=1.5/><circle cx=8 cy=8 r=1.3/><path d=\'M13 3v18M3 13h18\'/></svg><span>motherboard1.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -693,12 +648,11 @@
             <li>Formato Micro-ATX</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 180<small>Mismo modelo, Newtek</small></div>
+            <div class="price">US$ 180</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20Gigabyte%20B840M%20DS3H%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.gigabyte.com/Motherboard/B840M-DS3H-rev-10" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -706,7 +660,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="motherboard2.webp" alt="MSI PRO B650M-P"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=3 width=18 height=18 rx=1.5/><circle cx=8 cy=8 r=1.3/><path d=\'M13 3v18M3 13h18\'/></svg><span>motherboard2.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -720,12 +673,11 @@
             <li>Formato Micro-ATX</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 220<small>Sin publicación local</small></div>
+            <div class="price">US$ 220</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20MSI%20PRO%20B650M-P%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.msi.com/Motherboard/PRO-B650M-P" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -733,7 +685,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag confirmado">Confirmado</span>
           <img src="motherboard3.webp" alt="ASRock B550M-HDV"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=3 width=18 height=18 rx=1.5/><circle cx=8 cy=8 r=1.3/><path d=\'M13 3v18M3 13h18\'/></svg><span>motherboard3.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -747,12 +698,11 @@
             <li>Audio 7.1 Realtek ALC887 · Micro-ATX</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 249<small>Mismo modelo, PC Store</small></div>
+            <div class="price">US$ 249</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20la%20ASRock%20B550M-HDV%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.asrock.com/mb/AMD/B550M-HDV/" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -768,7 +718,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag equivalente">Equivalente</span>
           <img src="cpu1.webp" alt="AMD Ryzen 7 5700X"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=6 y=6 width=12 height=12 rx=1/><path d=\'M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4\'/></svg><span>cpu1.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -782,12 +731,11 @@
             <li>Combo ASRock incluido en la venta</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 290<small>Precio suelto, sin combo local</small></div>
+            <div class="price">US$ 290</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20AMD%20Ryzen%207%205700X%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -795,7 +743,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="cpu2.webp" alt="AMD Athlon X4 950"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=6 y=6 width=12 height=12 rx=1/><path d=\'M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4\'/></svg><span>cpu2.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -808,12 +755,11 @@
             <li>Nicho / descontinuado</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 30<small>Sin listado en UY</small></div>
+            <div class="price">US$ 30</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20AMD%20Athlon%20X4%20950%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.amd.com/en/products/processors/desktops/ryzen.html#specifications" target="_blank" rel="noopener">Buscar ficha ↗</a>
           </div>
         </div>
       </article>
@@ -829,7 +775,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="ram1.webp" alt="Kingston FURY Beast DDR5 64GB kit"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=8 width=18 height=8 rx=1/><path d=\'M6 8v8M10 8v8M14 8v8M18 8v8\'/></svg><span>ram1.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -841,12 +786,11 @@
             <li>RGB · Perfiles Intel XMP 3.0 / AMD EXPO</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 430<small>Ítem de mayor peso a confirmar</small></div>
+            <div class="price">US$ 430</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20Kingston%20FURY%20Beast%20DDR5%2064GB%20kit%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.kingston.com/en/memory/gaming/kingston-fury-beast-ddr5-rgb-memory" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -854,7 +798,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="ram2.webp" alt="KingBank SharpBlade DDR5 16GB"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=8 width=18 height=8 rx=1/><path d=\'M6 8v8M10 8v8M14 8v8M18 8v8\'/></svg><span>ram2.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -866,12 +809,11 @@
             <li>Logo y edición confirmados por foto</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 110<small>No listado en tiendas UY</small></div>
+            <div class="price">US$ 110</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20KingBank%20SharpBlade%20DDR5%2016GB%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://kingbank.com/" target="_blank" rel="noopener">Sitio del fabricante ↗</a>
           </div>
         </div>
       </article>
@@ -879,7 +821,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="ram3.webp" alt="Samsung DDR4 (2 módulos)"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><rect x=3 y=8 width=18 height=8 rx=1/><path d=\'M6 8v8M10 8v8M14 8v8M18 8v8\'/></svg><span>ram3.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -890,12 +831,11 @@
             <li>Instalados y confirmados en el combo ASRock (Ryzen 5700X)</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 50<small>Patrón de mercado</small></div>
+            <div class="price">US$ 50</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesa%20el%20Samsung%20DDR4%20(2%20m%C3%B3dulos)%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <span class="official-link" style="opacity:.4; pointer-events:none;">Sin ficha específica</span>
           </div>
         </div>
       </article>
@@ -911,7 +851,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="fan1.webp" alt="Ventilador DeepCool CF120"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><circle cx=12 cy=12 r=9/><path d=\'M12 3c1 3 1 5 0 9M21 12c-3 1-5 1-9 0M12 21c-1-3-1-5 0-9M3 12c3-1 5-1 9 0\'/></svg><span>fan1.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -922,12 +861,11 @@
             <li>Modelo DF1202512CL007 · 120mm</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 50<small>Las 5 unidades</small></div>
+            <div class="price">US$ 50</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesan%20los%20Ventiladores%20DeepCool%20CF120%20(x5)%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.deepcool.com/products/Cooling/fans/CF120-RGB-PWM-Fan-Single/2021/11469.shtml" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -935,7 +873,6 @@
       <article class="card">
         <span class="rivet-tl"></span><span class="rivet-tr"></span><span class="rivet-bl"></span><span class="rivet-br"></span>
         <div class="card-media">
-          <span class="tag estimado">Estimado</span>
           <img src="fan2.webp" alt="Ventilador Nox Hummer Fan Series"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder-ph',innerHTML:'<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.2\'><circle cx=12 cy=12 r=9/><path d=\'M12 3c1 3 1 5 0 9M21 12c-3 1-5 1-9 0M12 21c-1-3-1-5 0-9M3 12c3-1 5-1 9 0\'/></svg><span>fan2.webp</span>'}))">
           <span class="zoom-hint">🔍</span>
@@ -946,12 +883,11 @@
             <li>120mm</li>
           </ul>
           <div class="card-foot">
-            <div class="price">US$ 35<small>Las 2 unidades</small></div>
+            <div class="price">US$ 35</div>
             <a class="whatsapp-link" href="https://wa.me/59894691690?text=Hola%2C%20me%20interesan%20los%20Ventiladores%20Nox%20Hummer%20Fan%20Series%20(x2)%20del%20Lote%2001-A" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Pedir
             </a>
-            <a class="official-link" href="https://www.nox-xtreme.com/refrigeracion/s-fan" target="_blank" rel="noopener">Ver ficha oficial ↗</a>
           </div>
         </div>
       </article>
@@ -962,12 +898,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="legend">
-      <span><b>Confirmado</b> — mismo modelo publicado en tienda uruguaya, precio verificado.</span>
-      <span><b>Equivalente</b> — modelo exacto no encontrado; se usó otro de la misma línea y tier.</span>
-      <span><b>Estimado</b> — sin publicación local; multiplicador de mercado aplicado.</span>
-    </div>
-    <p>Precios de referencia relevados en tiendas de Uruguay (Aslan, PC Store, PC Parts, Newtek Computers, Sampler y Laaca/Tienda Geek) el 18/07/2026. Son precios de lista, contado/transferencia — pueden variar por stock, tipo de cambio y promociones. Escribime si te interesa algún ítem en particular o el lote completo.</p>
+    <p>Escribime si te interesa algún ítem en particular o el lote completo.</p>
     <p class="source-note">Lote 01-A · 13 componentes verificados contra hardware físico · Catálogo generado julio 2026</p>
   </div>
 </footer>
@@ -1052,7 +983,6 @@
       traces = [];
       chips = [];
       
-      // Crear nodos (puntos de conexión)
       for (let i = 0; i < 80; i++) {
         nodes.push({
           x: Math.random() * width,
@@ -1062,7 +992,6 @@
         });
       }
       
-      // Crear trazas (líneas de circuito)
       for (let i = 0; i < 60; i++) {
         const startNode = nodes[Math.floor(Math.random() * nodes.length)];
         const endNode = nodes[Math.floor(Math.random() * nodes.length)];
@@ -1078,7 +1007,6 @@
         }
       }
       
-      // Crear chips (centrales como puente norte/sur)
       for (let i = 0; i < 5; i++) {
         chips.push({
           x: Math.random() * width,
@@ -1095,7 +1023,6 @@
     function drawCircuit() {
       ctx.clearRect(0, 0, width, height);
       
-      // Dibujar trazas
       ctx.strokeStyle = 'rgba(100, 100, 100, 0.15)';
       traces.forEach(trace => {
         ctx.lineWidth = trace.width;
@@ -1105,7 +1032,6 @@
         ctx.stroke();
       });
       
-      // Dibujar nodos
       nodes.forEach(node => {
         const alpha = 0.2 + node.brightness * 0.3;
         ctx.fillStyle = `rgba(150, 150, 150, ${alpha})`;
@@ -1114,25 +1040,20 @@
         ctx.fill();
       });
       
-      // Dibujar chips
       chips.forEach(chip => {
-        // Actualizar brillo
         chip.glow += (chip.glowTarget - chip.glow) * 0.05;
         
         if (Math.random() < 0.002) {
           chip.glowTarget = Math.random() > 0.5 ? 1 : 0;
         }
         
-        // Dibujar chip
         ctx.fillStyle = `rgba(40, 40, 40, 0.6)`;
         ctx.fillRect(chip.x - chip.width/2, chip.y - chip.height/2, chip.width, chip.height);
         
-        // Borde del chip
         ctx.strokeStyle = `rgba(80, 80, 80, 0.4)`;
         ctx.lineWidth = 1;
         ctx.strokeRect(chip.x - chip.width/2, chip.y - chip.height/2, chip.width, chip.height);
         
-        // Brillo rojo si está activo
         if (chip.glow > 0.1) {
           const gradient = ctx.createRadialGradient(
             chip.x, chip.y, 0,
@@ -1144,7 +1065,6 @@
           ctx.fillStyle = gradient;
           ctx.fillRect(chip.x - chip.width, chip.y - chip.height, chip.width * 2, chip.height * 2);
           
-          // LED indicador
           ctx.fillStyle = `rgba(255, 80, 80, ${chip.glow})`;
           ctx.beginPath();
           ctx.arc(chip.x + chip.width/2 - 5, chip.y - chip.height/2 + 5, 2, 0, Math.PI * 2);
@@ -1152,7 +1072,6 @@
         }
       });
       
-      // Dibujar pulsos (señales viajando)
       pulses = pulses.filter(pulse => pulse.progress < 1);
       pulses.forEach(pulse => {
         pulse.progress += 0.008;
@@ -1170,7 +1089,6 @@
         ctx.fill();
       });
       
-      // Crear nuevos pulsos aleatoriamente
       if (Math.random() < 0.02 && traces.length > 0) {
         const trace = traces[Math.floor(Math.random() * traces.length)];
         pulses.push({
@@ -1194,7 +1112,7 @@
   })();
 
   // =========================================
-  // LÓGICA DEL DINO Y NAVE (código anterior intacto)
+  // LÓGICA DEL DINO Y NAVE
   // =========================================
   (function(){
     const dinoWalker = document.getElementById('dinoWalker');
@@ -1319,7 +1237,7 @@
   })();
 
   // =========================================
-  // LIGHTBOX (código anterior intacto)
+  // LIGHTBOX
   // =========================================
   (function(){
     var lightbox = document.getElementById('lightbox');
