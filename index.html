@@ -194,6 +194,62 @@
     padding:14px;
     cursor:zoom-in;
   }
+  .card-media .carousel-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:36px; height:36px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:rgba(21,23,27,.82);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:3;
+    backdrop-filter:blur(6px);
+    font-size:1rem;
+  }
+  .card-media .carousel-btn.prev{ left:10px; }
+  .card-media .carousel-btn.next{ right:10px; }
+  .card-media .carousel-btn:hover{ border-color:var(--brass); color:var(--brass); }
+  .card-media .thumbs-strip{
+    position:absolute;
+    left:50%; bottom:10px;
+    transform:translateX(-50%);
+    display:flex; gap:6px; align-items:center; justify-content:center;
+    flex-wrap:wrap;
+    z-index:3;
+    pointer-events:none;
+  }
+  .card-media .thumb{
+    width:42px; height:42px;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:5px;
+    padding:2px;
+    background:rgba(21,23,27,.78);
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    pointer-events:auto;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .card-media .thumb:hover{ border-color:var(--brass); transform:translateY(-1px); }
+  .card-media .thumb.active{ border-color:var(--brass); box-shadow:0 0 0 1px rgba(201,162,39,.25); }
+  .card-media .thumb img{
+    width:100%; height:100%; object-fit:cover; padding:0; border-radius:3px;
+  }
+  .card-media .carousel-counter{
+    position:absolute; top:10px; left:10px;
+    background:rgba(21,23,27,.72);
+    border:1px solid var(--line);
+    color:var(--ink-dim);
+    font-family:'JetBrains Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    padding:5px 8px;
+    border-radius:999px;
+    z-index:3;
+  }
   .zoom-hint{
     position:absolute; bottom:10px; right:10px;
     width:30px; height:30px;
@@ -331,6 +387,7 @@
     font-weight:700;
   }
 
+  .official-link,
   .whatsapp-link{
     display:inline-flex;
     align-items:center;
@@ -338,12 +395,22 @@
     font-family:'JetBrains Mono', monospace;
     font-size:.68rem;
     text-decoration:none;
-    color:var(--whatsapp);
-    border:1px solid rgba(37,211,102,.4);
     padding:7px 10px;
     border-radius:2px;
     white-space:nowrap;
     transition:background .15s ease, border-color .15s ease;
+  }
+  .official-link{
+    color:var(--brass);
+    border:1px solid rgba(201,162,39,.35);
+  }
+  .official-link:hover{ 
+    background:rgba(201,162,39,.12); 
+    border-color:rgba(201,162,39,.7);
+  }
+  .whatsapp-link{
+    color:var(--whatsapp);
+    border:1px solid rgba(37,211,102,.4);
   }
   .whatsapp-link:hover{ 
     background:rgba(37,211,102,.12); 
@@ -1237,6 +1304,157 @@
   })();
 
   // =========================================
+  // CAROUSEL INTERNO POR TARJETA
+  // =========================================
+  (function(){
+    function getCandidatePaths(src){
+      var current = src || '';
+      var path = current.split('/').pop();
+      var match = path.match(/^(.*?)(\.[^.]+)$/);
+      if(!match) return [current];
+
+      var base = match[1];
+      var ext = match[2];
+      var candidates = [current];
+      for(var i = 2; i <= 6; i++){
+        candidates.push(base + '-' + i + ext);
+      }
+      return candidates;
+    }
+
+    function discoverImages(src, done){
+      var candidates = getCandidatePaths(src);
+      var found = [];
+      var pending = candidates.length;
+
+      if(!pending) return done(found);
+
+      candidates.forEach(function(candidate){
+        var testImg = new Image();
+        testImg.onload = function(){
+          if(found.indexOf(candidate) === -1) found.push(candidate);
+          pending -= 1;
+          if(pending === 0) done(found);
+        };
+        testImg.onerror = function(){
+          pending -= 1;
+          if(pending === 0) done(found);
+        };
+        testImg.src = candidate;
+      });
+    }
+
+    document.querySelectorAll('.card-media > img').forEach(function(mainImg){
+      mainImg.classList.add('card-main-image');
+      var src = mainImg.getAttribute('src') || '';
+      if(!src) return;
+
+      discoverImages(src, function(images){
+        if(!images.length) return;
+        if(images.indexOf(src) === -1) images.unshift(src);
+
+        var cardMedia = mainImg.parentElement;
+        var currentIndex = 0;
+        var counter = document.createElement('span');
+        counter.className = 'carousel-counter';
+        counter.textContent = '1/' + images.length;
+        cardMedia.appendChild(counter);
+
+        var prevBtn = document.createElement('button');
+        prevBtn.className = 'carousel-btn prev';
+        prevBtn.type = 'button';
+        prevBtn.setAttribute('aria-label', 'Ver imagen anterior');
+        prevBtn.textContent = '‹';
+
+        var nextBtn = document.createElement('button');
+        nextBtn.className = 'carousel-btn next';
+        nextBtn.type = 'button';
+        nextBtn.setAttribute('aria-label', 'Ver imagen siguiente');
+        nextBtn.textContent = '›';
+
+        var thumbs = document.createElement('div');
+        thumbs.className = 'thumbs-strip';
+
+        images.forEach(function(imagePath, index){
+          var thumb = document.createElement('button');
+          thumb.type = 'button';
+          thumb.className = 'thumb' + (index === 0 ? ' active' : '');
+          thumb.setAttribute('aria-label', 'Ver foto ' + (index + 1));
+          thumb.innerHTML = '<img src="' + imagePath + '" alt="">';
+          thumb.addEventListener('click', function(e){
+            e.stopPropagation();
+            setActive(index);
+          });
+          thumbs.appendChild(thumb);
+        });
+
+        cardMedia.appendChild(prevBtn);
+        cardMedia.appendChild(nextBtn);
+        cardMedia.appendChild(thumbs);
+
+        function setActive(index){
+          currentIndex = (index + images.length) % images.length;
+          mainImg.setAttribute('src', images[currentIndex]);
+          counter.textContent = (currentIndex + 1) + '/' + images.length;
+          thumbs.querySelectorAll('.thumb').forEach(function(thumbEl, thumbIndex){
+            thumbEl.classList.toggle('active', thumbIndex === currentIndex);
+          });
+        }
+
+        prevBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          setActive(currentIndex - 1);
+        });
+        nextBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          setActive(currentIndex + 1);
+        });
+
+        setActive(0);
+      });
+    });
+  })();
+
+  // =========================================
+  // LINKS OFICIALES POR TARJETA
+  // =========================================
+  (function(){
+    var officialByTitle = {
+      'XFX Radeon RX 9070 XT Quicksilver 16GB': 'https://www.xfxforce.com/shop/xfx-quicksilver-amd-radeon-rx-9070xt-gaming-edition',
+      'Gigabyte RX 7800 XT Gaming OC 16GB': 'https://www.gigabyte.com/uy/Graphics-Card/GV-R78XTGAMING-OC-16GD',
+      'PNY GeForce RTX 5070 OC 12GB': 'https://www.pny.com/geforce-rtx-5070-models',
+      'Gigabyte B840M DS3H': 'https://www.gigabyte.com/Motherboard/B840M-DS3H-rev-10',
+      'MSI PRO B650M-P': 'https://www.google.com/search?q=' + encodeURIComponent('MSI PRO B650M-P sitio oficial'),
+      'ASRock B550M-HDV': 'https://www.google.com/search?q=' + encodeURIComponent('ASRock B550M-HDV sitio oficial'),
+      'AMD Ryzen 7 5700X': 'https://www.google.com/search?q=' + encodeURIComponent('AMD Ryzen 7 5700X sitio oficial'),
+      'AMD Athlon X4 950': 'https://www.google.com/search?q=' + encodeURIComponent('AMD Athlon X4 950 sitio oficial'),
+      'Kingston FURY Beast DDR5 64GB kit': 'https://www.google.com/search?q=' + encodeURIComponent('Kingston FURY Beast DDR5 64GB kit sitio oficial'),
+      'KingBank SharpBlade DDR5 16GB': 'https://www.google.com/search?q=' + encodeURIComponent('KingBank SharpBlade DDR5 16GB sitio oficial'),
+      'Samsung DDR4 (2 módulos)': 'https://www.google.com/search?q=' + encodeURIComponent('Samsung DDR4 2 módulos sitio oficial'),
+      'Ventilador DeepCool CF120 — x5': 'https://www.google.com/search?q=' + encodeURIComponent('DeepCool CF120 sitio oficial'),
+      'Ventilador Nox Hummer Fan Series — x2': 'https://www.google.com/search?q=' + encodeURIComponent('Nox Hummer Fan Series sitio oficial')
+    };
+
+    document.querySelectorAll('.card').forEach(function(card){
+      var title = card.querySelector('h3');
+      if(!title) return;
+      var productName = title.textContent.trim();
+      var href = officialByTitle[productName];
+      var foot = card.querySelector('.card-foot');
+      var whatsapp = foot && foot.querySelector('.whatsapp-link');
+      if(!foot || !whatsapp) return;
+
+      var officialLink = document.createElement('a');
+      officialLink.className = 'official-link';
+      officialLink.href = href || 'https://www.google.com/search?q=' + encodeURIComponent(productName + ' sitio oficial');
+      officialLink.target = '_self';
+      officialLink.rel = 'noopener noreferrer';
+      officialLink.textContent = 'Oficial';
+      foot.insertBefore(officialLink, whatsapp);
+    });
+  })();
+
+  // =========================================
   // LIGHTBOX
   // =========================================
   (function(){
@@ -1289,7 +1507,7 @@
       lightboxImg.src = '';
     }
 
-    document.querySelectorAll('.card-media img').forEach(function(img){
+    document.querySelectorAll('.card-main-image').forEach(function(img){
       img.addEventListener('click', function(){
         openLightbox(img.currentSrc || img.src, img.alt);
       });
