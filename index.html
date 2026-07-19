@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lote 01-A — Catálogo técnico</title>
+<title>🦖 Lote 01-A — Catálogo técnico</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -630,7 +630,7 @@
       <span class="dino-pill"><span class="walker"></span>Elitech</span>
     </div>
 
-    <p class="kicker">Lote 01-A · Julio 2026 · Montevideo</p>
+    <p class="kicker">🦖 Lote 01-A · Julio 2026 · Montevideo</p>
     <h1 class="title">Hardware real.<br><span>Cero relato de vendedor.</span></h1>
     <p class="subtitle">Cada pieza se chequeó contra el hardware físico antes de subirse acá. Lo que ves en la ficha es exactamente lo que se entrega.</p>
 
@@ -1686,6 +1686,33 @@
       if(e.touches.length < 2) touchStartDist = null;
       if(e.touches.length === 0) dragging = false;
     });
+  })();
+
+  // =========================================
+  // ANIMACIÓN DEL DINO EN EL TÍTULO
+  // =========================================
+  (function(){
+    const baseTitle = 'Lote 01-A — Catálogo técnico';
+    const dino = '🦖';
+    let position = 0;
+    let direction = 1;
+
+    console.log('Iniciando animación del dino en título');
+
+    setInterval(function() {
+      const spaces = ' '.repeat(position);
+      const newTitle = spaces + dino + ' ' + baseTitle;
+      document.title = newTitle;
+      console.log('Título:', newTitle);
+
+      position += direction;
+
+      if (position >= 8) {
+        direction = -1;
+      } else if (position <= 0) {
+        direction = 1;
+      }
+    }, 500);
   })();
 </script>
 
