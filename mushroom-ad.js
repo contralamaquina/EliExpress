@@ -47,13 +47,13 @@
     @keyframes mmPortal { from { transform: scale(1); opacity: 1; } 70% { opacity: .7; } to { transform: scale(90); opacity: 0; } }
 
     #mm-veil { position: fixed; inset: 0; z-index: 9995; pointer-events: none;
-      background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(255,120,90,.18) 0%, rgba(140,30,25,.35) 40%, rgba(50,8,8,.85) 80%);
+      background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(255,226,160,.18) 0%, rgba(90,120,70,.32) 40%, rgba(30,45,28,.8) 80%);
       animation: mmVeil 2.2s ease-in-out forwards; }
     @keyframes mmVeil { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
 
     /* Viñeta constante mientras el bosque está activo */
     #mm-vignette { position: fixed; inset: 0; z-index: 9993; pointer-events: none; opacity: 0; transition: opacity 1.2s ease;
-      background: radial-gradient(ellipse at center, transparent 45%, rgba(30,4,4,.7) 100%); }
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(10,18,8,.65) 100%); }
     #mm-vignette.on { opacity: 1; }
 
     #mm-creep { position: fixed; inset: 0; z-index: 9994; pointer-events: none; transition: opacity .8s ease; }
@@ -72,7 +72,7 @@
     @keyframes mmSpore { 0% { transform: translate(0,0); opacity: 0; } 25% { opacity: .9; } 100% { transform: translate(var(--mm-dx, 0px), var(--mm-dy, -160px)); opacity: 0; } }
     .mm-dirt { position: fixed; width: 5px; height: 4px; border-radius: 40%; background: #6b4a2e; z-index: 9997; pointer-events: none; }
     .mm-tumor { position: fixed; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; z-index: 9996; pointer-events: none; opacity: 0;
-      background: radial-gradient(circle, #ffd2c4 0%, #e0482f 40%, rgba(120,20,15,0) 70%); box-shadow: 0 0 10px rgba(255,70,50,.6); }
+      background: radial-gradient(circle, #eaffb8 0%, #8fc85a 40%, rgba(74,107,58,0) 70%); box-shadow: 0 0 10px rgba(180,230,120,.6); }
 
     #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); max-height: 88vh; overflow: auto; z-index: 9999;
       background: radial-gradient(circle at 20% 0%, #f8f0dc 0%, #efe3c4 100%); color: #3b2c1e; border-radius: 16px; padding: 28px 28px 26px; box-sizing: border-box;
@@ -121,7 +121,7 @@
     <svg viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="mmCap" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#d9a441"/><stop offset="1" stop-color="#8b4a2b"/>
+          <stop offset="0" stop-color="#e0392b"/><stop offset="1" stop-color="#7a1410"/>
         </linearGradient>
         <radialGradient id="mmGlowG" cx=".5" cy=".5" r=".5">
           <stop offset="0" stop-color="#ffe6a8" stop-opacity=".6"/><stop offset="1" stop-color="#ffe6a8" stop-opacity="0"/>
@@ -291,12 +291,12 @@
           </filter>
           <filter id="mm-veins" color-interpolation-filters="sRGB">
             <feTurbulence id="mm-vturb" type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="2" result="v"/>
-            <feColorMatrix in="v" type="matrix" values="0 0 0 0 1  0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 12 -7.2"/>
+            <feColorMatrix in="v" type="matrix" values="0 0 0 0 0.75  0 0 0 0 1  0 0 0 0 0.55  0 0 0 12 -7.2"/>
           </filter>
           <radialGradient id="mm-creep-grad" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="#a8322a" stop-opacity=".6"/>
-            <stop offset=".7" stop-color="#5a1612" stop-opacity=".75"/>
-            <stop offset="1" stop-color="#240807" stop-opacity=".85"/>
+            <stop offset="0" stop-color="#5b8a44" stop-opacity=".6"/>
+            <stop offset=".7" stop-color="#2c4a24" stop-opacity=".75"/>
+            <stop offset="1" stop-color="#14240f" stop-opacity=".85"/>
           </radialGradient>
           <mask id="mm-blob-mask">
             <circle id="mm-mask-c" cx="${origin.x}" cy="${origin.y}" r="0" fill="#fff" filter="url(#mm-organic)"/>
