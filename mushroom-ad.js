@@ -42,9 +42,9 @@
     @keyframes mmBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
     @keyframes mmGlow { 0%,100% { opacity: .3; } 50% { opacity: .7; } }
 
-    .mm-portal { position: fixed; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; z-index: 9996; pointer-events: none;
+    .mm-portal { position: fixed; width: 200vmax; height: 200vmax; margin: -100vmax 0 0 -100vmax; border-radius: 50%; z-index: 9996; pointer-events: none; will-change: transform, opacity;
       border: 2px solid rgba(255,240,200,.85); box-shadow: 0 0 30px rgba(255,220,140,.55); animation: mmPortal 1.4s cubic-bezier(.2,.7,.2,1) forwards; }
-    @keyframes mmPortal { from { transform: scale(1); opacity: 1; } 70% { opacity: .7; } to { transform: scale(90); opacity: 0; } }
+    @keyframes mmPortal { from { transform: scale(.02); opacity: 1; } 70% { opacity: .6; } to { transform: scale(.7); opacity: 0; } }
 
     #mm-veil { position: fixed; inset: 0; z-index: 9995; pointer-events: none;
       background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(255,226,160,.18) 0%, rgba(90,120,70,.32) 40%, rgba(30,45,28,.8) 80%);
