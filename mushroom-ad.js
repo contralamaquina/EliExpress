@@ -109,11 +109,30 @@
     #mm-panel .mm-loader-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg,#8fb35a,#d9a441); animation: mmLoad linear forwards; }
     @keyframes mmLoad { to { width: 100%; } }
 
+    /* Parásito: vínculo verde que recorre el panel, un ojo que sigue el cursor y el latido del vínculo */
+    #mm-panel { animation: mmPulse 2.6s ease-in-out infinite; }
+    #mm-panel:not(.open) { animation: none; }
+    @keyframes mmPulse {
+      0%,100% { box-shadow: 0 18px 50px rgba(20,35,20,.45), 0 0 26px rgba(125,255,90,.2), inset 0 0 0 4px rgba(255,255,255,.35); }
+      50% { box-shadow: 0 18px 50px rgba(20,35,20,.45), 0 0 52px rgba(125,255,90,.45), inset 0 0 0 4px rgba(255,255,255,.35); }
+    }
+    #mm-panel .mm-infest { position: absolute; inset: 0; pointer-events: none; border-radius: 16px; overflow: hidden; opacity: 0; transition: opacity 1s ease .4s; }
+    #mm-panel.open .mm-infest { opacity: 1; }
+    #mm-panel .mm-infest svg { width: 100%; height: 100%; display: block; }
+    #mm-panel .mm-infest path { fill: none; stroke: #7dff5a; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 520; stroke-dashoffset: 520; opacity: .6; filter: drop-shadow(0 0 4px rgba(125,255,90,.7)); animation: mmGrow 2.6s ease-out .3s forwards, mmThrob 3s ease-in-out 3s infinite; }
+    @keyframes mmGrow { to { stroke-dashoffset: 0; } }
+    @keyframes mmThrob { 0%,100% { opacity: .45; } 50% { opacity: .9; } }
+    #mm-panel .mm-eye { position: absolute; left: 16px; top: 16px; width: 12px; height: 12px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle at 40% 35%, #eaffd6 0 18%, #5fe03a 22% 55%, #1d4d12 58%); box-shadow: 0 0 10px rgba(125,255,90,.8); }
+    #mm-panel .mm-eye i { position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: #0b1a06; transition: transform .08s linear; }
+    #mm-panel .mm-link { position: absolute; left: 16px; bottom: 10px; font: .6rem system-ui, sans-serif; letter-spacing: 2px; text-transform: uppercase; color: #5fe03a; text-shadow: 0 0 6px rgba(125,255,90,.6); pointer-events: none; }
+
     @media (max-width: 500px) { #mm-panel .mm-items { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
       #mm-hongo .mm-cap, #mm-hongo .mm-glow { animation: none; }
       #mm-sweep, #mm-veil, #mm-vignette, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, #mm-creep { display: none; }
       #mm-panel .mm-loader-bar i { animation: none; width: 100%; }
+      #mm-panel, #mm-panel .mm-infest path { animation: none; }
+      #mm-panel .mm-infest path { stroke-dashoffset: 0; }
     }
   `;
 
@@ -525,6 +544,16 @@
     panel.innerHTML = `
       <button id="mm-close" type="button" aria-label="Cerrar">✕</button>
       <button id="mm-sound" type="button" aria-pressed="${soundOn}"></button>
+      <div class="mm-infest" aria-hidden="true">
+        <svg viewBox="0 0 560 500" preserveAspectRatio="none">
+          <path d="M0 60 C 40 40, 70 120, 120 90 S 200 30, 240 70"/>
+          <path d="M560 40 C 500 80, 470 30, 420 70 S 350 140, 300 110"/>
+          <path d="M0 440 C 60 400, 90 470, 150 430 S 240 380, 280 450"/>
+          <path d="M560 470 C 510 420, 470 480, 420 440 S 340 380, 300 430"/>
+        </svg>
+      </div>
+      <span class="mm-eye" aria-hidden="true"><i></i></span>
+      <span class="mm-link" aria-hidden="true">● Vínculo activo</span>
       <div class="mm-loader" aria-live="polite">
         <div class="mm-loader-text">Brotando ${CONFIG.brand}…</div>
         <div class="mm-loader-bar"><i style="animation-duration:${CONFIG.loadingMs}ms"></i></div>
@@ -654,6 +683,18 @@
         busy = false;
       }, 2500);
     });
+
+    const eyeBox = panel.querySelector('.mm-eye');
+    const pupil = panel.querySelector('.mm-eye i');
+    window.addEventListener('pointermove', (e) => {
+      if (!open || !pupil) return;
+      const r = eyeBox.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const m = Math.min(3, d);
+      pupil.style.transform = `translate(${(dx / d) * m}px, ${(dy / d) * m}px)`;
+    }, { passive: true });
 
     panel.querySelector('#mm-close').addEventListener('click', closePanel);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
