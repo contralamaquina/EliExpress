@@ -133,23 +133,21 @@
 
     /* Jardín del Edén */
     #mm-garden { position: fixed; inset: 0; z-index: 9994; pointer-events: none; overflow: hidden; transition: opacity .8s ease;
-      background: radial-gradient(ellipse at 70% 0%, rgba(255,246,196,.7) 0%, rgba(168,220,115,.45) 25%, rgba(74,157,67,.55) 55%, rgba(31,95,44,.72) 100%); }
-    #mm-garden .mm-sun { position: absolute; top: -14vmax; right: -10vmax; width: 60vmax; height: 60vmax; border-radius: 50%;
+      background: none; }
+    #mm-garden .mm-sun { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%;
       background: radial-gradient(circle, #fffbe0 0%, #ffe38a 22%, rgba(255,220,120,0) 62%); animation: mmSunPulse 6s ease-in-out infinite; mix-blend-mode: screen; }
     @keyframes mmSunPulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
-    #mm-garden .mm-rays { position: absolute; top: -40vmax; right: -40vmax; width: 110vmax; height: 110vmax;
+    #mm-garden .mm-rays { position: absolute; width: 110vmax; height: 110vmax;
       background: repeating-conic-gradient(from 0deg, rgba(255,240,180,.22) 0deg 6deg, rgba(255,240,180,0) 6deg 18deg);
       animation: mmRays 60s linear infinite; mix-blend-mode: soft-light; }
     @keyframes mmRays { to { transform: rotate(360deg); } }
-    #mm-garden .mm-trees { position: absolute; left: 0; bottom: 0; width: 100%; height: 38vh; overflow: visible; }
+    #mm-garden .mm-trees { position: absolute; left: 0; bottom: 0; width: 44vw; height: 42vh; overflow: visible; }
     #mm-garden .mm-tree { animation: mmSway 5s ease-in-out infinite; }
     @keyframes mmSway { 0%,100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
     #mm-garden .mm-butterfly { position: absolute; left: 0; top: 0; width: 24px; height: 20px; will-change: transform; }
     #mm-garden .mm-butterfly svg { width: 100%; height: 100%; overflow: visible; }
     #mm-garden .mm-butterfly g { transform-origin: 12px 9px; animation: mmFlap .3s ease-in-out infinite alternate; }
     @keyframes mmFlap { from { transform: scaleX(1); } to { transform: scaleX(.2); } }
-    #mm-garden .mm-net { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
-    #mm-garden .mm-net path { fill: none; stroke: #ffd66b; stroke-width: 1.2; stroke-linecap: round; opacity: .75; filter: drop-shadow(0 0 3px rgba(255,214,107,.8)); }
     #mm-garden .mm-flower { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; }
     #mm-garden .mm-flower svg { width: 100%; height: 100%; display: block; overflow: visible; }
 
@@ -252,7 +250,7 @@
       wrap.appendChild(b);
       const frames = [{ transform: `translate(${origin.x}px, ${origin.y}px)`, offset: 0 }];
       for (let k = 1; k <= 5; k++) {
-        const a = Math.random() * Math.PI * 2, r = 80 + Math.random() * 320;
+        const a = Math.random() * Math.PI * 2, r = 60 + Math.random() * 240;
         frames.push({ transform: `translate(${origin.x + Math.cos(a) * r}px, ${origin.y + Math.sin(a) * r - 60}px)`, offset: k / 6 });
       }
       frames.push({ transform: `translate(${origin.x}px, ${origin.y}px)`, offset: 1 });
@@ -269,32 +267,20 @@
     wrap.innerHTML = `
       <div class="mm-sun"></div>
       <div class="mm-rays"></div>
-      <svg class="mm-net" viewBox="0 0 ${vw} ${vh}" aria-hidden="true"></svg>
-      <svg class="mm-trees" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-        ${treeSVG(110, 300, 1.0, 0)}${treeSVG(300, 300, 0.7, 1)}${treeSVG(690, 300, 0.85, 2)}${treeSVG(900, 300, 1.1, 3)}
+      <svg class="mm-trees" viewBox="0 0 440 300" preserveAspectRatio="xMinYMax meet" aria-hidden="true">
+        ${treeSVG(60, 300, 1.0, 0)}${treeSVG(170, 300, 0.7, 1)}${treeSVG(275, 300, 0.9, 2)}${treeSVG(380, 300, 1.1, 3)}
       </svg>`;
     document.body.appendChild(wrap);
+
+    const sun = wrap.querySelector('.mm-sun'), rays = wrap.querySelector('.mm-rays');
+    sun.style.left = `calc(${origin.x}px - 30vmax)`; sun.style.top = `calc(${origin.y}px - 30vmax)`;
+    rays.style.left = `calc(${origin.x}px - 55vmax)`; rays.style.top = `calc(${origin.y}px - 55vmax)`;
+    wrap.style.background = `radial-gradient(circle at ${origin.x}px ${origin.y}px, rgba(255,246,196,.55) 0%, rgba(168,220,115,.35) 18%, rgba(74,157,67,.22) 40%, rgba(31,95,44,0) 70%)`;
 
     wrap.animate([
       { clipPath: `circle(0px at ${origin.x}px ${origin.y}px)` },
       { clipPath: `circle(${maxR}px at ${origin.x}px ${origin.y}px)` },
     ], { duration: dur, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
-
-    // Micelio: un hilo dorado que une el hongo con cada elemento tocado
-    const net = wrap.querySelector('.mm-net');
-    targets.slice(0, CONFIG.tumorMax).forEach((t) => {
-      const cx = t.rect.left + t.rect.width / 2, cy = t.rect.top + t.rect.height / 2;
-      const mx = (origin.x + cx) / 2 + (Math.random() - 0.5) * 120;
-      const my = (origin.y + cy) / 2 + (Math.random() - 0.5) * 120;
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', `M${origin.x} ${origin.y} Q${mx} ${my} ${cx} ${cy}`);
-      net.appendChild(path);
-      const L = path.getTotalLength();
-      path.animate([
-        { strokeDasharray: `${L}`, strokeDashoffset: `${L}` },
-        { strokeDasharray: `${L}`, strokeDashoffset: '0' },
-      ], { duration: 900, delay: (t.d / maxD) * 700, fill: 'forwards', easing: 'ease-out' });
-    });
 
     wrap.querySelectorAll('.mm-grow').forEach((g, i) => {
       g.animate([{ transform: 'scale(0)' }, { transform: 'scale(1)' }], {
@@ -673,7 +659,8 @@
       // 3) El creep crece desde la base del hongo, con temblor
       fadeCreep();
       const targets = collectTargets(origin);
-      activeCreep = growGarden({ x: origin.x, y: baseY }, CONFIG.creepMs, targets);
+      const nearTargets = targets.filter((t) => t.d < 460);
+      activeCreep = growGarden({ x: origin.x, y: baseY }, CONFIG.creepMs, nearTargets);
       shake([activeCreep, veil], 520, 5);
       setTimeout(() => shake([activeCreep, veil], 380, 3), CONFIG.creepMs * 0.55);
       enableCursorSpores();
@@ -681,7 +668,7 @@
       // 4) Hojas, esporas, magia sobre los elementos y brotes
       forestParticles(origin);
       magicOverPage(targets);
-      spawnTumors(targets);
+      spawnTumors(nearTargets);
       if (c) for (let i = 0; i < 6; i++) sfxPop(c, 0.3 + i * 0.22 + Math.random() * 0.1);
 
       // 5) El mundo se revela en el panel
