@@ -224,12 +224,43 @@
 
   function treeSVG(x, y, s, i) {
     const h = 150 * s;
+    // Números pseudoaleatorios estables por árbol (cada árbol tiene su forma)
+    const rnd = (k) => { const v = Math.sin((i + 1) * 127.1 + k * 311.7) * 43758.5453; return v - Math.floor(v); };
+    const greens = ['#2a6b30', '#2f7a35', '#3e9a44', '#4caf50', '#5fb85a'];
+    const cy = y - h * 0.78;
+
+    // Copa: racimos de hojas de distintos verdes, más densos al centro
+    let canopy = '';
+    for (let k = 0; k < 11; k++) {
+      const a = (k / 11) * Math.PI * 2 + rnd(k) * 0.5;
+      const d = (18 + rnd(k + 20) * 22) * s;
+      const cx = x + Math.cos(a) * d * 1.25;
+      const cyy = cy + Math.sin(a) * d * 0.8;
+      const r = (20 + rnd(k + 40) * 16) * s;
+      canopy += `<circle cx="${cx.toFixed(1)}" cy="${cyy.toFixed(1)}" r="${r.toFixed(1)}" fill="${greens[k % greens.length]}"/>`;
+    }
+    // Luz que entra por la copa
+    let light = '';
+    for (let k = 0; k < 5; k++) {
+      const cx = x + (rnd(k + 60) - 0.6) * 40 * s;
+      const cyy = cy - 14 * s - rnd(k + 70) * 18 * s;
+      light += `<circle cx="${cx.toFixed(1)}" cy="${cyy.toFixed(1)}" r="${((7 + rnd(k + 80) * 6) * s).toFixed(1)}" fill="#b8e986" opacity=".5"/>`;
+    }
+    // Flores o frutos: rosados en los pares, dorados en los impares
+    const accentColor = i % 2 === 0 ? '#ffb7cc' : '#ffd66b';
+    let accents = '';
+    for (let k = 0; k < 9; k++) {
+      const a = rnd(k + 90) * Math.PI * 2;
+      const d = (16 + rnd(k + 100) * 30) * s;
+      accents += `<circle cx="${(x + Math.cos(a) * d * 1.2).toFixed(1)}" cy="${(cy + Math.sin(a) * d * 0.8).toFixed(1)}" r="${(2.6 * s).toFixed(1)}" fill="${accentColor}"/>`;
+    }
+
     return `<g class="mm-grow" style="transform-origin:${x}px ${y}px">
+      <ellipse cx="${x}" cy="${y}" rx="${44 * s}" ry="${8 * s}" fill="rgba(20,40,15,.28)"/>
       <g class="mm-tree" style="transform-origin:${x}px ${y}px; animation-delay:${-i * 1.3}s">
-        <rect x="${x - 6 * s}" y="${y - h * 0.55}" width="${12 * s}" height="${h * 0.55}" rx="4" fill="#6b4a2e"/>
-        <circle cx="${x}" cy="${y - h * 0.75}" r="${52 * s}" fill="#2f7a35"/>
-        <circle cx="${x - 30 * s}" cy="${y - h * 0.6}" r="${36 * s}" fill="#3e9a44"/>
-        <circle cx="${x + 32 * s}" cy="${y - h * 0.62}" r="${38 * s}" fill="#4caf50"/>
+        <path d="M${x - 9 * s} ${y} Q${x - 4 * s} ${y - h * 0.35} ${x - 3 * s} ${y - h * 0.6} L${x + 3 * s} ${y - h * 0.6} Q${x + 4 * s} ${y - h * 0.35} ${x + 9 * s} ${y} Z" fill="#6b4a2e"/>
+        <path d="M${x} ${y - h * 0.45} Q${x - 22 * s} ${y - h * 0.55} ${x - 34 * s} ${y - h * 0.7} M${x} ${y - h * 0.5} Q${x + 20 * s} ${y - h * 0.6} ${x + 30 * s} ${y - h * 0.72}" stroke="#5a3d25" stroke-width="${(3 * s).toFixed(1)}" fill="none" stroke-linecap="round"/>
+        ${canopy}${light}${accents}
       </g></g>`;
   }
 
