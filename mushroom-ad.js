@@ -74,7 +74,7 @@
     .mm-tumor { position: fixed; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; z-index: 9996; pointer-events: none; opacity: 0;
       background: radial-gradient(circle, #eaffb8 0%, #8fc85a 40%, rgba(74,107,58,0) 70%); box-shadow: 0 0 10px rgba(180,230,120,.6); }
 
-    #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); max-height: 88vh; overflow: auto; z-index: 9999;
+    #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); overflow: visible; z-index: 9999;
       background: none; color: #3b2c1e; border-radius: 16px; isolation: isolate; padding: 28px 28px 26px; box-sizing: border-box;
       border: 0; font-family: Georgia, 'Times New Roman', serif;
       opacity: 0; pointer-events: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
@@ -103,7 +103,7 @@
     #mm-panel .mm-loader { display: none; padding: 26px 0 30px; text-align: center; }
     #mm-panel.loading .mm-loader { display: block; }
     #mm-panel.loading .mm-content { opacity: 0; }
-    #mm-panel .mm-content { transition: opacity .6s ease .1s; }
+    #mm-panel .mm-content { transition: opacity .6s ease .1s; max-height: 80vh; overflow-y: auto; scrollbar-width: none; }
     #mm-panel .mm-loader-text { font-size: .8rem; letter-spacing: 2px; font-style: italic; color: #6b5540; margin-bottom: 14px; }
     #mm-panel .mm-loader-bar { height: 5px; border-radius: 999px; background: rgba(90,62,43,.12); overflow: hidden; }
     #mm-panel .mm-loader-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg,#8fb35a,#d9a441); animation: mmLoad linear forwards; }
@@ -111,7 +111,7 @@
 
     /* Parásito: vínculo verde que recorre el panel, un ojo que sigue el cursor y el latido del vínculo */
     #mm-panel.open { animation: mmUnfold 1.1s cubic-bezier(.2,.8,.2,1) both; }
-    @keyframes mmUnfold { from { clip-path: inset(46% 46% 46% 46% round 60px); } to { clip-path: inset(0 0 0 0 round 16px); } }
+    @keyframes mmUnfold { from { clip-path: inset(46% 46% 46% 46% round 60px); } to { clip-path: inset(-120px -120px -120px -120px round 60px); } }
     #mm-panel:not(.open) { animation: none; }
     @keyframes mmPulse {
       0%,100% { box-shadow: 0 18px 50px rgba(20,35,20,.45), 0 0 26px rgba(125,255,90,.2), inset 0 0 0 4px rgba(255,255,255,.35); }
@@ -127,7 +127,7 @@
     #mm-panel .mm-eye i { position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: #0b1a06; transition: transform .08s linear; }
     #mm-panel .mm-link { position: absolute; left: 16px; bottom: 10px; font: .6rem system-ui, sans-serif; letter-spacing: 2px; text-transform: uppercase; color: #5fe03a; text-shadow: 0 0 6px rgba(125,255,90,.6); pointer-events: none; }
 
-    #mm-panel .mm-membrane { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; overflow: visible;
+    #mm-panel .mm-membrane { position: absolute; left: -36px; top: -36px; z-index: -1; pointer-events: none; overflow: visible;
       filter: drop-shadow(0 18px 40px rgba(20,35,20,.5)) drop-shadow(0 0 16px rgba(125,255,90,.35)); }
     #mm-panel .mm-membrane path { stroke: #7dff5a; stroke-width: 1.6; stroke-linejoin: round; animation: mmWet 3.2s ease-in-out infinite; }
     @keyframes mmWet { 0%,100% { stroke-opacity: .3; } 50% { stroke-opacity: .9; } }
@@ -630,8 +630,10 @@
       return d + 'Z';
     }
     function animateMembrane() {
-      const w = panel.clientWidth, h = panel.scrollHeight;
+      const PAD = 36;
+      const w = panel.offsetWidth + PAD * 2, h = panel.offsetHeight + PAD * 2;
       membraneSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      membraneSvg.style.width = w + 'px';
       membraneSvg.style.height = h + 'px';
       const start = performance.now();
       if (membraneRaf) cancelAnimationFrame(membraneRaf);
