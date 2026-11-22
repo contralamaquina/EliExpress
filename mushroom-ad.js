@@ -1,10 +1,10 @@
 // ============================================================
 // HONGUITO DEL BOSQUE — otromundo
-// Un hongo escondido en el pasto. Al tocarlo se hunde en la tierra,
-// y de la base se extiende un creep orgánico con venas luminosas
-// que cubre la página. Caen hojas, suben esporas, aparecen brotes
-// en los elementos, suena un zumbido de tierra y se revela el
-// panel de servicios. Sin dependencias externas: SVG + Web Audio.
+// Un hongo escondido en el pasto. Al tocarlo se hunde en la tierra y
+// de su base crece un creep orgánico que cubre la página, con venas
+// que laten. Mientras el panel está abierto el bosque sigue vivo:
+// ambiente de tierra con gotas, esporas que siguen al cursor, y el
+// nombre aparece letra por letra. Sin dependencias externas.
 // ============================================================
 (function () {
   const CONFIG = {
@@ -24,6 +24,7 @@
     creepMs: 1900,
     leafCount: 14,
     sporeCount: 12,
+    cursorSporeEveryMs: 70,
   };
 
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -41,28 +42,28 @@
     @keyframes mmBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
     @keyframes mmGlow { 0%,100% { opacity: .3; } 50% { opacity: .7; } }
 
-    /* Círculo de luz cálida que se expande desde el hongo */
     .mm-portal { position: fixed; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; z-index: 9996; pointer-events: none;
       border: 2px solid rgba(255,240,200,.85); box-shadow: 0 0 30px rgba(255,220,140,.55); animation: mmPortal 1.4s cubic-bezier(.2,.7,.2,1) forwards; }
     @keyframes mmPortal { from { transform: scale(1); opacity: 1; } 70% { opacity: .7; } to { transform: scale(90); opacity: 0; } }
 
-    /* Atardecer en el bosque */
     #mm-veil { position: fixed; inset: 0; z-index: 9995; pointer-events: none;
-      background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(255,226,160,.18) 0%, rgba(90,120,70,.32) 40%, rgba(30,45,28,.8) 80%);
+      background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(255,120,90,.18) 0%, rgba(140,30,25,.35) 40%, rgba(50,8,8,.85) 80%);
       animation: mmVeil 2.2s ease-in-out forwards; }
     @keyframes mmVeil { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
 
-    /* Creep orgánico: capa SVG con desplazamiento de ruido para el borde viscoso */
-    #mm-creep { position: fixed; inset: 0; z-index: 9994; pointer-events: none; }
+    /* Viñeta constante mientras el bosque está activo */
+    #mm-vignette { position: fixed; inset: 0; z-index: 9993; pointer-events: none; opacity: 0; transition: opacity 1.2s ease;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(30,4,4,.7) 100%); }
+    #mm-vignette.on { opacity: 1; }
+
+    #mm-creep { position: fixed; inset: 0; z-index: 9994; pointer-events: none; transition: opacity .8s ease; }
     #mm-creep svg { width: 100%; height: 100%; display: block; }
 
-    /* Rayo de sol */
     #mm-sweep { position: fixed; inset: 0; z-index: 9997; pointer-events: none; mix-blend-mode: screen;
       background: linear-gradient(100deg, transparent 40%, rgba(255,236,180,.28) 50%, transparent 60%);
       background-size: 260% 100%; background-position: 120% 0; animation: mmSweep 1.8s cubic-bezier(.4,.1,.2,1) forwards; }
     @keyframes mmSweep { from { background-position: 120% 0; opacity: 1; } 80% { opacity: 1; } to { background-position: -40% 0; opacity: 0; } }
 
-    /* Hojas, esporas, tierra y brotes */
     .mm-leaf { position: fixed; top: -20px; width: 12px; height: 8px; border-radius: 0 80% 0 80%; background: linear-gradient(135deg,#8fb35a,#4a6b3a); z-index: 9997; pointer-events: none;
       animation: mmFall var(--mm-dur, 3.4s) linear forwards; }
     @keyframes mmFall { from { transform: translate(0,0) rotate(0deg); } to { transform: translate(var(--mm-dx, 0px), 110vh) rotate(540deg); } }
@@ -71,7 +72,7 @@
     @keyframes mmSpore { 0% { transform: translate(0,0); opacity: 0; } 25% { opacity: .9; } 100% { transform: translate(var(--mm-dx, 0px), var(--mm-dy, -160px)); opacity: 0; } }
     .mm-dirt { position: fixed; width: 5px; height: 4px; border-radius: 40%; background: #6b4a2e; z-index: 9997; pointer-events: none; }
     .mm-tumor { position: fixed; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; z-index: 9996; pointer-events: none; opacity: 0;
-      background: radial-gradient(circle, #eaffb8 0%, #8fc85a 40%, rgba(74,107,58,0) 70%); box-shadow: 0 0 10px rgba(180,230,120,.6); }
+      background: radial-gradient(circle, #ffd2c4 0%, #e0482f 40%, rgba(120,20,15,0) 70%); box-shadow: 0 0 10px rgba(255,70,50,.6); }
 
     #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); max-height: 88vh; overflow: auto; z-index: 9999;
       background: radial-gradient(circle at 20% 0%, #f8f0dc 0%, #efe3c4 100%); color: #3b2c1e; border-radius: 16px; padding: 28px 28px 26px; box-sizing: border-box;
@@ -80,6 +81,7 @@
     #mm-panel.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
     #mm-panel .mm-kicker { font-size: .66rem; letter-spacing: 2.5px; text-transform: uppercase; color: #8a5a2b; margin-bottom: 4px; font-style: italic; }
     #mm-panel .mm-brand { font-size: 1.35rem; font-weight: 700; letter-spacing: 1px; color: #2f5233; }
+    #mm-panel .mm-brand .mm-ch { display: inline-block; }
     #mm-panel .mm-badge { display: inline-block; margin: 8px 0 12px; font-size: .64rem; letter-spacing: 2px; text-transform: uppercase; color: #5b6e2f; background: rgba(143,179,90,.18); border: 1px solid rgba(91,110,47,.35); padding: 4px 10px; border-radius: 999px; font-family: system-ui, sans-serif; }
     #mm-panel h2 { margin: 0 0 10px; font-size: clamp(1.2rem, 2.6vw, 1.6rem); line-height: 1.25; color: #2f5233; }
     #mm-panel h2 span { color: #b5651d; font-style: italic; }
@@ -98,7 +100,6 @@
     #mm-sound { position: absolute; top: 12px; right: 54px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid rgba(90,62,43,.25); background: rgba(255,255,255,.5); color: #6b5540; cursor: pointer; font: .72rem system-ui, sans-serif; letter-spacing: .5px; }
     #mm-sound:hover { color: #3b2c1e; background: #fff; }
 
-    /* Brotando el mundo dentro del panel */
     #mm-panel .mm-loader { display: none; padding: 26px 0 30px; text-align: center; }
     #mm-panel.loading .mm-loader { display: block; }
     #mm-panel.loading .mm-content { opacity: 0; }
@@ -111,12 +112,11 @@
     @media (max-width: 500px) { #mm-panel .mm-items { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
       #mm-hongo .mm-cap, #mm-hongo .mm-glow { animation: none; }
-      #mm-sweep, #mm-veil, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, #mm-creep { display: none; }
+      #mm-sweep, #mm-veil, #mm-vignette, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, #mm-creep { display: none; }
       #mm-panel .mm-loader-bar i { animation: none; width: 100%; }
     }
   `;
 
-  // Hongo del bosque: sombrero ocre con manchitas crema, pie claro, pasto verde.
   const hongoSVG = `
     <svg viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -157,7 +157,6 @@
     for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
     return buf;
   }
-  // Chasquido húmedo al hundirse en la tierra
   function sfxSquelch(c) {
     const t = c.currentTime;
     const src = c.createBufferSource();
@@ -182,25 +181,25 @@
     o.connect(og).connect(c.destination);
     o.start(t); o.stop(t + 0.36);
   }
-  // Zumbido grave de tierra que acompaña el crecimiento del creep
-  function sfxDrone(c, seconds) {
+  // Retumbo que crece con el creep: sube de volumen y se abre el filtro
+  function sfxRumble(c, seconds) {
     const t = c.currentTime;
     const o = c.createOscillator();
-    o.type = 'sawtooth'; o.frequency.value = 52;
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(48, t); o.frequency.linearRampToValueAtTime(64, t + seconds);
     const lp = c.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 260;
+    lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(140, t); lp.frequency.linearRampToValueAtTime(420, t + seconds * 0.8);
     const lfo = c.createOscillator(), lfoG = c.createGain();
     lfo.frequency.value = 0.35; lfoG.gain.value = 3;
     lfo.connect(lfoG).connect(o.frequency);
     const g = c.createGain();
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.08, t + 0.5);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + seconds);
+    g.gain.exponentialRampToValueAtTime(0.09, t + 0.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + seconds + 0.6);
     o.connect(lp).connect(g).connect(c.destination);
     o.start(t); lfo.start(t);
-    o.stop(t + seconds); lfo.stop(t + seconds);
+    o.stop(t + seconds + 0.7); lfo.stop(t + seconds + 0.7);
   }
-  // Pop de espora
   function sfxPop(c, delay) {
     const t = c.currentTime + delay;
     const o = c.createOscillator(), g = c.createGain();
@@ -212,7 +211,18 @@
     o.connect(g).connect(c.destination);
     o.start(t); o.stop(t + 0.15);
   }
-  // Acorde suave al revelarse el panel
+  function sfxDrip(c) {
+    const t = c.currentTime;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(900 + Math.random() * 500, t);
+    o.frequency.exponentialRampToValueAtTime(380, t + 0.25);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.09, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
+    o.connect(g).connect(c.destination);
+    o.start(t); o.stop(t + 0.33);
+  }
   function sfxChime(c) {
     const t = c.currentTime;
     [293.7, 370, 440, 554].forEach((f, i) => {
@@ -227,10 +237,46 @@
     });
   }
 
+  // Ambiente de bosque mientras el panel está abierto: ruido marrón suave con
+  // respiración lenta y gotas esporádicas. Devuelve la función para apagarlo.
+  function startAmbient(c) {
+    const src = c.createBufferSource();
+    src.buffer = noiseBuffer(c, 4); src.loop = true;
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 320;
+    const bed = c.createGain();
+    bed.gain.value = 0.0001;
+    bed.gain.exponentialRampToValueAtTime(0.035, c.currentTime + 2);
+    const breath = c.createOscillator(), breathG = c.createGain();
+    breath.frequency.value = 0.08; breathG.gain.value = 0.012;
+    breath.connect(breathG).connect(bed.gain);
+    src.connect(lp).connect(bed).connect(c.destination);
+    src.start(); breath.start();
+
+    let dripTimer = null;
+    function scheduleDrip() {
+      dripTimer = setTimeout(() => {
+        if (audioCtx && audioCtx.state === 'running') sfxDrip(audioCtx);
+        scheduleDrip();
+      }, 1800 + Math.random() * 2600);
+    }
+    scheduleDrip();
+
+    return function stop() {
+      clearTimeout(dripTimer);
+      try {
+        bed.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 1.2);
+        src.stop(c.currentTime + 1.3);
+        breath.stop(c.currentTime + 1.3);
+      } catch (_) { /* ya detenido */ }
+    };
+  }
+
   // ---------- CREEP ORGÁNICO (SVG + filtros de ruido) ----------
-  // Un círculo que crece desde el hongo con borde viscoso (feDisplacementMap)
-  // y venas luminosas recortadas a su forma (máscara). El ruido respira
-  // mientras crece para que no parezca una animación mecánica.
+  let activeCreep = null;
+  let stopAmbientFn = null;
+  let cursorSporeHandler = null;
+
   function growCreep(origin, dur) {
     const vw = window.innerWidth, vh = window.innerHeight;
     const maxR = Math.hypot(Math.max(origin.x, vw - origin.x), Math.max(origin.y, vh - origin.y)) + 60;
@@ -244,13 +290,13 @@
             <feDisplacementMap id="mm-disp" in="SourceGraphic" in2="n" scale="34" xChannelSelector="R" yChannelSelector="G"/>
           </filter>
           <filter id="mm-veins" color-interpolation-filters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="2" result="v"/>
-            <feColorMatrix in="v" type="matrix" values="0 0 0 0 0.75  0 0 0 0 1  0 0 0 0 0.55  0 0 0 12 -7.2"/>
+            <feTurbulence id="mm-vturb" type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="2" result="v"/>
+            <feColorMatrix in="v" type="matrix" values="0 0 0 0 1  0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 12 -7.2"/>
           </filter>
           <radialGradient id="mm-creep-grad" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="#5b8a44" stop-opacity=".6"/>
-            <stop offset=".7" stop-color="#2c4a24" stop-opacity=".75"/>
-            <stop offset="1" stop-color="#14240f" stop-opacity=".85"/>
+            <stop offset="0" stop-color="#a8322a" stop-opacity=".6"/>
+            <stop offset=".7" stop-color="#5a1612" stop-opacity=".75"/>
+            <stop offset="1" stop-color="#240807" stop-opacity=".85"/>
           </radialGradient>
           <mask id="mm-blob-mask">
             <circle id="mm-mask-c" cx="${origin.x}" cy="${origin.y}" r="0" fill="#fff" filter="url(#mm-organic)"/>
@@ -258,7 +304,7 @@
         </defs>
         <circle id="mm-blob" cx="${origin.x}" cy="${origin.y}" r="0" fill="url(#mm-creep-grad)" filter="url(#mm-organic)"/>
         <g mask="url(#mm-blob-mask)" opacity=".38">
-          <rect width="100%" height="100%" filter="url(#mm-veins)"/>
+          <rect id="mm-vein-rect" width="100%" height="100%" filter="url(#mm-veins)"/>
         </g>
       </svg>`;
     document.body.appendChild(wrap);
@@ -267,29 +313,81 @@
     const mask = wrap.querySelector('#mm-mask-c');
     const disp = wrap.querySelector('#mm-disp');
     const turb = wrap.querySelector('#mm-turb');
+    const vturb = wrap.querySelector('#mm-vturb');
     const start = performance.now();
 
-    function frame(now) {
+    // Latido: el borde respira y las venas se mueven despacio mientras el bosque esté vivo
+    function living(e) {
+      disp.setAttribute('scale', (34 + 16 * Math.sin(e / 260)).toFixed(2));
+      turb.setAttribute('baseFrequency', (0.012 + 0.003 * Math.sin(e / 600)).toFixed(4));
+      vturb.setAttribute('baseFrequency', (0.045 + 0.006 * Math.sin(e / 900)).toFixed(4));
+    }
+
+    function grow(now) {
       const e = now - start;
       const t = Math.min(1, e / dur);
       const r = maxR * (1 - Math.pow(1 - t, 3));
       blob.setAttribute('r', r);
       mask.setAttribute('r', r);
-      disp.setAttribute('scale', (34 + 16 * Math.sin(e / 260)).toFixed(2));
-      turb.setAttribute('baseFrequency', (0.012 + 0.003 * Math.sin(e / 600)).toFixed(4));
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        wrap.style.transition = 'opacity .6s ease';
-        wrap.style.opacity = '0';
-        setTimeout(() => wrap.remove(), 700);
-      }
+      living(e);
+      if (t < 1) { requestAnimationFrame(grow); return; }
+      // Cuando termina de crecer, sigue vivo a menor frecuencia (ahorra CPU)
+      const iv = setInterval(() => {
+        if (!wrap.isConnected) { clearInterval(iv); return; }
+        living(performance.now() - start);
+      }, 90);
     }
-    requestAnimationFrame(frame);
+    requestAnimationFrame(grow);
     return wrap;
   }
 
-  // ---------- PARTÍCULAS Y BROTES ----------
+  function fadeCreep() {
+    if (!activeCreep) return;
+    const wrap = activeCreep;
+    activeCreep = null;
+    wrap.style.opacity = '0';
+    setTimeout(() => wrap.remove(), 900);
+  }
+
+  // Temblor del mundo al brotar: sacude las capas fijas (no el body, para no romper position: fixed)
+  function shake(elements, ms, amp) {
+    elements.forEach((el) => {
+      if (!el || !el.animate) return;
+      const frames = [];
+      const steps = 8;
+      for (let i = 0; i <= steps; i++) {
+        const k = (1 - i / steps) * amp;
+        frames.push({ transform: `translate(${(Math.random() - 0.5) * 2 * k}px, ${(Math.random() - 0.5) * 2 * k}px)` });
+      }
+      frames.push({ transform: 'translate(0,0)' });
+      el.animate(frames, { duration: ms, easing: 'linear' });
+    });
+  }
+
+  // Esporas que siguen al cursor mientras el bosque está activo
+  function enableCursorSpores() {
+    let last = 0;
+    cursorSporeHandler = (e) => {
+      const now = performance.now();
+      if (now - last < CONFIG.cursorSporeEveryMs) return;
+      last = now;
+      const s = document.createElement('div');
+      s.className = 'mm-spore';
+      s.style.left = e.clientX + 'px';
+      s.style.top = e.clientY + 'px';
+      s.style.setProperty('--mm-dur', '1s');
+      s.style.setProperty('--mm-dx', ((Math.random() - 0.5) * 30) + 'px');
+      s.style.setProperty('--mm-dy', (-20 - Math.random() * 30) + 'px');
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1100);
+    };
+    window.addEventListener('pointermove', cursorSporeHandler, { passive: true });
+  }
+  function disableCursorSpores() {
+    if (cursorSporeHandler) window.removeEventListener('pointermove', cursorSporeHandler);
+    cursorSporeHandler = null;
+  }
+
   function forestParticles(origin) {
     for (let i = 0; i < CONFIG.leafCount; i++) {
       const leaf = document.createElement('div');
@@ -315,7 +413,6 @@
     }
   }
 
-  // Tierra que salta al hundirse el hongo
   function dirtBurst(origin) {
     for (let i = 0; i < 10; i++) {
       const d = document.createElement('div');
@@ -334,14 +431,13 @@
     }
   }
 
-  // Elegir qué elementos participan de la magia: los más cercanos al hongo primero
   function collectTargets(origin) {
     const skip = new Set(['SCRIPT', 'STYLE', 'LINK', 'META', 'NOSCRIPT', 'BR', 'SVG', 'PATH']);
     const vw = window.innerWidth, vh = window.innerHeight;
     const out = [];
     document.body.querySelectorAll('*').forEach((el) => {
       if (skip.has(el.tagName)) return;
-      if (el.closest('#mm-hongo, #mm-panel, #mm-sweep, #mm-veil, #mm-creep, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor')) return;
+      if (el.closest('#mm-hongo, #mm-panel, #mm-sweep, #mm-veil, #mm-vignette, #mm-creep, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor')) return;
       const r = el.getBoundingClientRect();
       if (r.width < 20 || r.height < 12) return;
       if (r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw) return;
@@ -353,8 +449,6 @@
     return out.slice(0, CONFIG.magicMaxElements);
   }
 
-  // Magia sobre los elementos: se mecen como ramas, se dan vuelta como hojas
-  // o se empañan como con rocío. Las animaciones se limpian solas.
   function magicOverPage(picked) {
     if (!document.body.animate) return;
     const maxD = picked.length ? picked[picked.length - 1].d || 1 : 1;
@@ -388,15 +482,16 @@
     });
   }
 
-  // Brotes luminosos en las esquinas de los elementos que toca el creep
   function spawnTumors(picked) {
+    if (!picked.length) return;
+    const maxD = picked[picked.length - 1].d || 1;
     picked.slice(0, CONFIG.tumorMax).forEach(({ rect, d }, i) => {
       const t = document.createElement('div');
       t.className = 'mm-tumor';
       t.style.left = (rect.left + Math.random() * rect.width) + 'px';
       t.style.top = (rect.top + Math.random() * rect.height) + 'px';
       document.body.appendChild(t);
-      const delay = (d / (picked[picked.length - 1].d || 1)) * 800;
+      const delay = (d / maxD) * 800;
       const anim = t.animate([
         { transform: 'scale(0)', opacity: 0, offset: 0 },
         { transform: 'scale(1.3)', opacity: 1, offset: 0.35 },
@@ -411,6 +506,10 @@
     const style = document.createElement('style');
     style.textContent = css;
     document.head.appendChild(style);
+
+    const vignette = document.createElement('div');
+    vignette.id = 'mm-vignette';
+    document.body.appendChild(vignette);
 
     const hongo = document.createElement('button');
     hongo.id = 'mm-hongo';
@@ -432,7 +531,7 @@
       </div>
       <div class="mm-content">
         <div class="mm-kicker">${CONFIG.kicker}</div>
-        <div class="mm-brand">${CONFIG.brand}</div>
+        <div class="mm-brand" aria-label="${CONFIG.brand}">${[...CONFIG.brand].map((ch) => `<span class="mm-ch" aria-hidden="true">${ch}</span>`).join('')}</div>
         <span class="mm-badge">${CONFIG.badge}</span>
         <h2>${CONFIG.headline}</h2>
         <p>${CONFIG.sub}</p>
@@ -453,22 +552,43 @@
       soundOn = !soundOn;
       try { localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); } catch (_) { /* sin storage */ }
       paintSound();
+      if (!soundOn && stopAmbientFn) { stopAmbientFn(); stopAmbientFn = null; }
+      if (soundOn && open && audioCtx) { stopAmbientFn = startAmbient(audioCtx); }
     });
 
     let busy = false;
     let open = false;
     let loadTimer = null;
 
+    function revealBrand() {
+      if (!document.body.animate) return;
+      panel.querySelectorAll('.mm-brand .mm-ch').forEach((s, i) => {
+        s.animate([
+          { opacity: 0, transform: 'translateY(10px)' },
+          { opacity: 1, transform: 'translateY(0)' },
+        ], { duration: 520, delay: 350 + i * 80, fill: 'backwards', easing: 'ease-out' });
+      });
+    }
+
     function openPanel() {
       open = true;
       panel.classList.add('open', 'loading');
+      vignette.classList.add('on');
       clearTimeout(loadTimer);
-      loadTimer = setTimeout(() => panel.classList.remove('loading'), CONFIG.loadingMs);
+      loadTimer = setTimeout(() => {
+        panel.classList.remove('loading');
+        revealBrand();
+      }, CONFIG.loadingMs);
+      if (audioCtx && soundOn && !stopAmbientFn) stopAmbientFn = startAmbient(audioCtx);
     }
     function closePanel() {
       open = false;
       panel.classList.remove('open', 'loading');
+      vignette.classList.remove('on');
       clearTimeout(loadTimer);
+      if (stopAmbientFn) { stopAmbientFn(); stopAmbientFn = null; }
+      disableCursorSpores();
+      fadeCreep();
     }
 
     hongo.addEventListener('click', () => {
@@ -477,8 +597,9 @@
       if (reduceMotion) return openPanel();
       busy = true;
 
-      // El audio se crea dentro del gesto del usuario (requisito del navegador)
       const c = getAudio();
+      if (navigator.vibrate) navigator.vibrate([25, 40, 70]);
+
       const rect = hongo.getBoundingClientRect();
       const origin = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       const baseY = rect.bottom - 4;
@@ -491,9 +612,9 @@
         { transform: 'translateY(0) scaleY(1)' },
       ], { duration: 1100, easing: 'ease-in-out' });
       dirtBurst({ x: origin.x, y: baseY });
-      if (c) { sfxSquelch(c); sfxDrone(c, 2.4); }
+      if (c) { sfxSquelch(c); sfxRumble(c, CONFIG.creepMs / 1000); }
 
-      // 2) Portal y atardecer
+      // 2) Portal, atardecer y rayo de sol
       const portal = document.createElement('div');
       portal.className = 'mm-portal';
       portal.style.left = origin.x + 'px';
@@ -510,8 +631,12 @@
       sweep.id = 'mm-sweep';
       document.body.appendChild(sweep);
 
-      // 3) El creep crece desde la base del hongo
-      growCreep({ x: origin.x, y: baseY }, CONFIG.creepMs);
+      // 3) El creep crece desde la base del hongo, con temblor
+      fadeCreep();
+      activeCreep = growCreep({ x: origin.x, y: baseY }, CONFIG.creepMs);
+      shake([activeCreep, veil], 520, 5);
+      setTimeout(() => shake([activeCreep, veil], 380, 3), CONFIG.creepMs * 0.55);
+      enableCursorSpores();
 
       // 4) Hojas, esporas, magia sobre los elementos y brotes
       forestParticles(origin);
@@ -520,7 +645,7 @@
       spawnTumors(targets);
       if (c) for (let i = 0; i < 6; i++) sfxPop(c, 0.3 + i * 0.22 + Math.random() * 0.1);
 
-      // 5) Se revela el mundo en el panel
+      // 5) El mundo se revela en el panel
       setTimeout(() => { openPanel(); if (c) sfxChime(c); }, 650);
       setTimeout(() => {
         sweep.remove();
