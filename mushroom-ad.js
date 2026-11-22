@@ -75,8 +75,8 @@
       background: radial-gradient(circle, #eaffb8 0%, #8fc85a 40%, rgba(74,107,58,0) 70%); box-shadow: 0 0 10px rgba(180,230,120,.6); }
 
     #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); max-height: 88vh; overflow: auto; z-index: 9999;
-      background: radial-gradient(circle at 20% 0%, #f8f0dc 0%, #efe3c4 100%); color: #3b2c1e; border-radius: 16px; padding: 28px 28px 26px; box-sizing: border-box;
-      border: 1px solid rgba(90,62,43,.25); box-shadow: 0 18px 50px rgba(20,35,20,.45), inset 0 0 0 4px rgba(255,255,255,.35); font-family: Georgia, 'Times New Roman', serif;
+      background: none; color: #3b2c1e; border-radius: 16px; isolation: isolate; padding: 28px 28px 26px; box-sizing: border-box;
+      border: 0; font-family: Georgia, 'Times New Roman', serif;
       opacity: 0; pointer-events: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
     #mm-panel.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
     #mm-panel .mm-kicker { font-size: .66rem; letter-spacing: 2.5px; text-transform: uppercase; color: #8a5a2b; margin-bottom: 4px; font-style: italic; }
@@ -110,7 +110,8 @@
     @keyframes mmLoad { to { width: 100%; } }
 
     /* Parásito: vínculo verde que recorre el panel, un ojo que sigue el cursor y el latido del vínculo */
-    #mm-panel { animation: mmPulse 2.6s ease-in-out infinite; }
+    #mm-panel.open { animation: mmUnfold 1.1s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes mmUnfold { from { clip-path: inset(46% 46% 46% 46% round 60px); } to { clip-path: inset(0 0 0 0 round 16px); } }
     #mm-panel:not(.open) { animation: none; }
     @keyframes mmPulse {
       0%,100% { box-shadow: 0 18px 50px rgba(20,35,20,.45), 0 0 26px rgba(125,255,90,.2), inset 0 0 0 4px rgba(255,255,255,.35); }
@@ -126,12 +127,21 @@
     #mm-panel .mm-eye i { position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: #0b1a06; transition: transform .08s linear; }
     #mm-panel .mm-link { position: absolute; left: 16px; bottom: 10px; font: .6rem system-ui, sans-serif; letter-spacing: 2px; text-transform: uppercase; color: #5fe03a; text-shadow: 0 0 6px rgba(125,255,90,.6); pointer-events: none; }
 
+    #mm-panel .mm-membrane { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; overflow: visible;
+      filter: drop-shadow(0 18px 40px rgba(20,35,20,.5)) drop-shadow(0 0 16px rgba(125,255,90,.35)); }
+    #mm-panel .mm-membrane path { stroke: #7dff5a; stroke-width: 1.6; stroke-linejoin: round; animation: mmWet 3.2s ease-in-out infinite; }
+    @keyframes mmWet { 0%,100% { stroke-opacity: .3; } 50% { stroke-opacity: .9; } }
+    #mm-root { position: fixed; inset: 0; z-index: 9998; pointer-events: none; transition: opacity .8s ease; }
+    #mm-root svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    #mm-root path { fill: none; stroke: #7dff5a; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(125,255,90,.8)); }
+
     @media (max-width: 500px) { #mm-panel .mm-items { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
       #mm-hongo .mm-cap, #mm-hongo .mm-glow { animation: none; }
       #mm-sweep, #mm-veil, #mm-vignette, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, #mm-creep { display: none; }
       #mm-panel .mm-loader-bar i { animation: none; width: 100%; }
-      #mm-panel, #mm-panel .mm-infest path { animation: none; }
+      #mm-panel, #mm-panel .mm-membrane path, #mm-panel .mm-infest path { animation: none; }
+      #mm-root { display: none; }
       #mm-panel .mm-infest path { stroke-dashoffset: 0; }
     }
   `;
@@ -544,14 +554,7 @@
     panel.innerHTML = `
       <button id="mm-close" type="button" aria-label="Cerrar">✕</button>
       <button id="mm-sound" type="button" aria-pressed="${soundOn}"></button>
-      <div class="mm-infest" aria-hidden="true">
-        <svg viewBox="0 0 560 500" preserveAspectRatio="none">
-          <path d="M0 60 C 40 40, 70 120, 120 90 S 200 30, 240 70"/>
-          <path d="M560 40 C 500 80, 470 30, 420 70 S 350 140, 300 110"/>
-          <path d="M0 440 C 60 400, 90 470, 150 430 S 240 380, 280 450"/>
-          <path d="M560 470 C 510 420, 470 480, 420 440 S 340 380, 300 430"/>
-        </svg>
-      </div>
+      <svg class="mm-membrane" aria-hidden="true"><path id="mm-mem-p" fill="#f5ecd6"/></svg>
       <span class="mm-eye" aria-hidden="true"><i></i></span>
       <span class="mm-link" aria-hidden="true">● Vínculo activo</span>
       <div class="mm-loader" aria-live="polite">
@@ -599,6 +602,72 @@
       });
     }
 
+    let lastOrigin = null;
+    let membraneRaf = null;
+    const membraneSvg = panel.querySelector('.mm-membrane');
+    const membranePathEl = panel.querySelector('#mm-mem-p');
+
+    // Forma de superelipse con deformación orgánica que cambia con el tiempo
+    function membraneD(w, h, t) {
+      const cx = w / 2, cy = h / 2, rx = w / 2 - 8, ry = h / 2 - 8, n = 3.6, N = 28;
+      const pts = [];
+      for (let i = 0; i < N; i++) {
+        const th = (2 * Math.PI * i) / N;
+        const c = Math.cos(th), s = Math.sin(th);
+        const wob = 1 + 0.018 * Math.sin(4 * th + t * 0.9) + 0.012 * Math.sin(7 * th - t * 1.4);
+        pts.push([
+          cx + rx * wob * Math.sign(c) * Math.pow(Math.abs(c), 2 / n),
+          cy + ry * wob * Math.sign(s) * Math.pow(Math.abs(s), 2 / n),
+        ]);
+      }
+      const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      const m0 = mid(pts[N - 1], pts[0]);
+      let d = `M${m0[0].toFixed(1)} ${m0[1].toFixed(1)}`;
+      for (let i = 0; i < N; i++) {
+        const p = pts[i], m = mid(p, pts[(i + 1) % N]);
+        d += ` Q${p[0].toFixed(1)} ${p[1].toFixed(1)} ${m[0].toFixed(1)} ${m[1].toFixed(1)}`;
+      }
+      return d + 'Z';
+    }
+    function animateMembrane() {
+      const w = panel.clientWidth, h = panel.scrollHeight;
+      membraneSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      membraneSvg.style.height = h + 'px';
+      const start = performance.now();
+      if (membraneRaf) cancelAnimationFrame(membraneRaf);
+      const tick = (now) => {
+        if (!open) { membraneRaf = null; return; }
+        membranePathEl.setAttribute('d', membraneD(w, h, (now - start) / 1000));
+        membraneRaf = requestAnimationFrame(tick);
+      };
+      membraneRaf = requestAnimationFrame(tick);
+    }
+    // Raíz que sale del hongo hacia el panel y se queda un momento
+    function drawRoot(from) {
+      const r = panel.getBoundingClientRect();
+      const to = { x: r.left + r.width / 2, y: r.top + 30 };
+      const mx = (from.x + to.x) / 2, my = (from.y + to.y) / 2;
+      const wrap = document.createElement('div');
+      wrap.id = 'mm-root';
+      wrap.innerHTML = `<svg viewBox="0 0 ${window.innerWidth} ${window.innerHeight}" preserveAspectRatio="none">
+        <path d="M${from.x} ${from.y} C ${from.x} ${from.y - 140}, ${to.x - 120} ${to.y + 200}, ${to.x} ${to.y}" stroke-width="2.2"/>
+        <path d="M${mx - 60} ${my + 40} q 40 -30 90 -10" stroke-width="1.2"/>
+        <path d="M${mx + 40} ${my - 40} q -30 30 -70 50" stroke-width="1.2"/>
+      </svg>`;
+      document.body.appendChild(wrap);
+      wrap.querySelectorAll('path').forEach((p, i) => {
+        const L = p.getTotalLength();
+        p.animate([
+          { strokeDasharray: `${L}`, strokeDashoffset: `${L}` },
+          { strokeDasharray: `${L}`, strokeDashoffset: '0' },
+        ], { duration: 900 + i * 200, delay: i * 120, fill: 'forwards', easing: 'ease-out' });
+      });
+      setTimeout(() => {
+        wrap.style.opacity = '0';
+        setTimeout(() => wrap.remove(), 900);
+      }, 2200);
+    }
+
     function openPanel() {
       open = true;
       panel.classList.add('open', 'loading');
@@ -609,6 +678,8 @@
         revealBrand();
       }, CONFIG.loadingMs);
       if (audioCtx && soundOn && !stopAmbientFn) stopAmbientFn = startAmbient(audioCtx);
+      animateMembrane();
+      if (lastOrigin) drawRoot(lastOrigin);
     }
     function closePanel() {
       open = false;
@@ -632,6 +703,7 @@
       const rect = hongo.getBoundingClientRect();
       const origin = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       const baseY = rect.bottom - 4;
+      lastOrigin = origin;
 
       // 1) El hongo se hunde en la tierra y vuelve a salir
       hongo.animate([
