@@ -68,7 +68,7 @@
     .mm-spore { position: fixed; width: 4px; height: 4px; border-radius: 50%; background: #ffd66b; box-shadow: 0 0 8px #ffc94a; z-index: 9997; pointer-events: none;
       animation: mmSpore var(--mm-dur, 2.4s) ease-out forwards; }
     @keyframes mmSpore { 0% { transform: translate(0,0); opacity: 0; } 25% { opacity: .9; } 100% { transform: translate(var(--mm-dx, 0px), var(--mm-dy, -160px)); opacity: 0; } }
-    .mm-dirt { position: fixed; width: 5px; height: 4px; border-radius: 40%; background: #6b4a2e; z-index: 9997; pointer-events: none; }
+    .mm-dirt { position: fixed; width: 5px; height: 4px; border-radius: 40%; background: #ffc94a; box-shadow: 0 0 6px rgba(255,201,74,.8); z-index: 9997; pointer-events: none; }
     .mm-tumor { position: fixed; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; z-index: 9996; pointer-events: none; opacity: 0;
       background: radial-gradient(circle, #fff4c2 0%, #ffc94a 40%, rgba(181,101,29,0) 70%); box-shadow: 0 0 10px rgba(255,200,74,.7); }
 
