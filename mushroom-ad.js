@@ -484,7 +484,7 @@
     const membranePathEl = panel.querySelector('#mm-mem-p');
 
     // Forma de superelipse con deformación orgánica que cambia con el tiempo
-    function membraneD(w, h, t, cut = 42) {
+    function membraneD(w, h, t, cut = 56) {
       const cx = w / 2, cy = (h - cut) / 2, rx = w / 2 - 8, ry = (h - cut) / 2 - 8, n = 3.6, N = 28;
       const pts = [];
       for (let i = 0; i < N; i++) {
