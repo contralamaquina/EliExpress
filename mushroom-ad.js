@@ -28,9 +28,7 @@
   };
 
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const SOUND_KEY = 'mm-sound';
-  let soundOn = true;
-  try { soundOn = localStorage.getItem(SOUND_KEY) !== 'off'; } catch (_) { /* sin storage: sonido activo */ }
+  const soundOn = true;
 
   const css = `
     #mm-hongo { position: fixed; left: 14px; bottom: 10px; width: 22px; height: 24px; z-index: 9998; cursor: pointer; border: 0; padding: 0; background: none; -webkit-tap-highlight-color: transparent; transform-origin: 50% 100%; }
@@ -67,12 +65,12 @@
     .mm-leaf { position: fixed; top: -20px; width: 12px; height: 8px; border-radius: 0 80% 0 80%; background: linear-gradient(135deg,#8fb35a,#4a6b3a); z-index: 9997; pointer-events: none;
       animation: mmFall var(--mm-dur, 3.4s) linear forwards; }
     @keyframes mmFall { from { transform: translate(0,0) rotate(0deg); } to { transform: translate(var(--mm-dx, 0px), 110vh) rotate(540deg); } }
-    .mm-spore { position: fixed; width: 4px; height: 4px; border-radius: 50%; background: #fff3d6; box-shadow: 0 0 6px #fff3d6; z-index: 9997; pointer-events: none;
+    .mm-spore { position: fixed; width: 4px; height: 4px; border-radius: 50%; background: #ffd66b; box-shadow: 0 0 8px #ffc94a; z-index: 9997; pointer-events: none;
       animation: mmSpore var(--mm-dur, 2.4s) ease-out forwards; }
     @keyframes mmSpore { 0% { transform: translate(0,0); opacity: 0; } 25% { opacity: .9; } 100% { transform: translate(var(--mm-dx, 0px), var(--mm-dy, -160px)); opacity: 0; } }
     .mm-dirt { position: fixed; width: 5px; height: 4px; border-radius: 40%; background: #6b4a2e; z-index: 9997; pointer-events: none; }
     .mm-tumor { position: fixed; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; z-index: 9996; pointer-events: none; opacity: 0;
-      background: radial-gradient(circle, #eaffb8 0%, #8fc85a 40%, rgba(74,107,58,0) 70%); box-shadow: 0 0 10px rgba(180,230,120,.6); }
+      background: radial-gradient(circle, #fff4c2 0%, #ffc94a 40%, rgba(181,101,29,0) 70%); box-shadow: 0 0 10px rgba(255,200,74,.7); }
 
     #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); overflow: visible; z-index: 9999;
       background: none; color: #3b2c1e; border-radius: 16px; isolation: isolate; padding: 28px 28px 26px; box-sizing: border-box;
@@ -97,8 +95,6 @@
     #mm-panel .mm-cta:hover { box-shadow: 0 6px 20px rgba(181,101,29,.45); }
     #mm-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(90,62,43,.25); background: rgba(255,255,255,.5); color: #6b5540; cursor: pointer; font-size: 14px; }
     #mm-close:hover { color: #3b2c1e; background: #fff; }
-    #mm-sound { position: absolute; top: 12px; right: 54px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid rgba(90,62,43,.25); background: rgba(255,255,255,.5); color: #6b5540; cursor: pointer; font: .72rem system-ui, sans-serif; letter-spacing: .5px; }
-    #mm-sound:hover { color: #3b2c1e; background: #fff; }
 
     #mm-panel .mm-loader { display: none; padding: 26px 0 30px; text-align: center; }
     #mm-panel.loading .mm-loader { display: block; }
@@ -186,49 +182,6 @@
     for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
     return buf;
   }
-  function sfxSquelch(c) {
-    const t = c.currentTime;
-    const src = c.createBufferSource();
-    src.buffer = noiseBuffer(c, 0.5);
-    const bp = c.createBiquadFilter();
-    bp.type = 'bandpass'; bp.Q.value = 4;
-    bp.frequency.setValueAtTime(900, t);
-    bp.frequency.exponentialRampToValueAtTime(160, t + 0.45);
-    const g = c.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.6, t + 0.03);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
-    src.connect(bp).connect(g).connect(c.destination);
-    src.start(t); src.stop(t + 0.5);
-
-    const o = c.createOscillator(), og = c.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(110, t);
-    o.frequency.exponentialRampToValueAtTime(38, t + 0.3);
-    og.gain.setValueAtTime(0.7, t);
-    og.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-    o.connect(og).connect(c.destination);
-    o.start(t); o.stop(t + 0.36);
-  }
-  // Retumbo que crece con el creep: sube de volumen y se abre el filtro
-  function sfxRumble(c, seconds) {
-    const t = c.currentTime;
-    const o = c.createOscillator();
-    o.type = 'sawtooth'; o.frequency.setValueAtTime(48, t); o.frequency.linearRampToValueAtTime(64, t + seconds);
-    const lp = c.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.setValueAtTime(140, t); lp.frequency.linearRampToValueAtTime(420, t + seconds * 0.8);
-    const lfo = c.createOscillator(), lfoG = c.createGain();
-    lfo.frequency.value = 0.35; lfoG.gain.value = 3;
-    lfo.connect(lfoG).connect(o.frequency);
-    const g = c.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.09, t + 0.5);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + seconds + 0.6);
-    o.connect(lp).connect(g).connect(c.destination);
-    o.start(t); lfo.start(t);
-    o.stop(t + seconds + 0.7); lfo.stop(t + seconds + 0.7);
-  }
   function sfxPop(c, delay) {
     const t = c.currentTime + delay;
     const o = c.createOscillator(), g = c.createGain();
@@ -240,70 +193,8 @@
     o.connect(g).connect(c.destination);
     o.start(t); o.stop(t + 0.15);
   }
-  function sfxDrip(c) {
-    const t = c.currentTime;
-    const o = c.createOscillator(), g = c.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(900 + Math.random() * 500, t);
-    o.frequency.exponentialRampToValueAtTime(380, t + 0.25);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.09, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
-    o.connect(g).connect(c.destination);
-    o.start(t); o.stop(t + 0.33);
-  }
-  function sfxChime(c) {
-    const t = c.currentTime;
-    [293.7, 370, 440, 554].forEach((f, i) => {
-      const o = c.createOscillator(), g = c.createGain();
-      o.type = 'sine'; o.frequency.value = f;
-      const s = t + 0.05 * i;
-      g.gain.setValueAtTime(0.0001, s);
-      g.gain.exponentialRampToValueAtTime(0.05, s + 0.25);
-      g.gain.exponentialRampToValueAtTime(0.0001, s + 2.4);
-      o.connect(g).connect(c.destination);
-      o.start(s); o.stop(s + 2.5);
-    });
-  }
-
-  // Ambiente de bosque mientras el panel está abierto: ruido marrón suave con
-  // respiración lenta y gotas esporádicas. Devuelve la función para apagarlo.
-  function startAmbient(c) {
-    const src = c.createBufferSource();
-    src.buffer = noiseBuffer(c, 4); src.loop = true;
-    const lp = c.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 320;
-    const bed = c.createGain();
-    bed.gain.value = 0.0001;
-    bed.gain.exponentialRampToValueAtTime(0.035, c.currentTime + 2);
-    const breath = c.createOscillator(), breathG = c.createGain();
-    breath.frequency.value = 0.08; breathG.gain.value = 0.012;
-    breath.connect(breathG).connect(bed.gain);
-    src.connect(lp).connect(bed).connect(c.destination);
-    src.start(); breath.start();
-
-    let dripTimer = null;
-    function scheduleDrip() {
-      dripTimer = setTimeout(() => {
-        if (audioCtx && audioCtx.state === 'running') sfxDrip(audioCtx);
-        scheduleDrip();
-      }, 1800 + Math.random() * 2600);
-    }
-    scheduleDrip();
-
-    return function stop() {
-      clearTimeout(dripTimer);
-      try {
-        bed.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 1.2);
-        src.stop(c.currentTime + 1.3);
-        breath.stop(c.currentTime + 1.3);
-      } catch (_) { /* ya detenido */ }
-    };
-  }
-
   // ---------- CREEP ORGÁNICO (SVG + filtros de ruido) ----------
   let activeCreep = null;
-  let stopAmbientFn = null;
   let cursorSporeHandler = null;
 
   function growCreep(origin, dur) {
@@ -553,7 +444,6 @@
     panel.setAttribute('aria-label', 'Servicios de ' + CONFIG.brand);
     panel.innerHTML = `
       <button id="mm-close" type="button" aria-label="Cerrar">✕</button>
-      <button id="mm-sound" type="button" aria-pressed="${soundOn}"></button>
       <svg class="mm-membrane" aria-hidden="true"><path id="mm-mem-p" fill="#f5ecd6"/></svg>
       <span class="mm-eye" aria-hidden="true"><i></i></span>
       <span class="mm-link" aria-hidden="true">● Vínculo activo</span>
@@ -573,20 +463,6 @@
         <a class="mm-cta" href="${CONFIG.whatsapp}" target="_blank" rel="noopener">Hablemos por WhatsApp →</a>
       </div>`;
     document.body.appendChild(panel);
-
-    const soundBtn = panel.querySelector('#mm-sound');
-    function paintSound() {
-      soundBtn.textContent = soundOn ? 'Sonido: on' : 'Sonido: off';
-      soundBtn.setAttribute('aria-pressed', String(soundOn));
-    }
-    paintSound();
-    soundBtn.addEventListener('click', () => {
-      soundOn = !soundOn;
-      try { localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); } catch (_) { /* sin storage */ }
-      paintSound();
-      if (!soundOn && stopAmbientFn) { stopAmbientFn(); stopAmbientFn = null; }
-      if (soundOn && open && audioCtx) { stopAmbientFn = startAmbient(audioCtx); }
-    });
 
     let busy = false;
     let open = false;
@@ -679,7 +555,6 @@
         panel.classList.remove('loading');
         revealBrand();
       }, CONFIG.loadingMs);
-      if (audioCtx && soundOn && !stopAmbientFn) stopAmbientFn = startAmbient(audioCtx);
       animateMembrane();
       if (lastOrigin) drawRoot(lastOrigin);
     }
@@ -688,7 +563,6 @@
       panel.classList.remove('open', 'loading');
       vignette.classList.remove('on');
       clearTimeout(loadTimer);
-      if (stopAmbientFn) { stopAmbientFn(); stopAmbientFn = null; }
       disableCursorSpores();
       fadeCreep();
     }
@@ -715,7 +589,6 @@
         { transform: 'translateY(0) scaleY(1)' },
       ], { duration: 1100, easing: 'ease-in-out' });
       dirtBurst({ x: origin.x, y: baseY });
-      if (c) { sfxSquelch(c); sfxRumble(c, CONFIG.creepMs / 1000); }
 
       // 2) Portal, atardecer y rayo de sol
       const portal = document.createElement('div');
@@ -749,7 +622,7 @@
       if (c) for (let i = 0; i < 6; i++) sfxPop(c, 0.3 + i * 0.22 + Math.random() * 0.1);
 
       // 5) El mundo se revela en el panel
-      setTimeout(() => { openPanel(); if (c) sfxChime(c); }, 650);
+      setTimeout(openPanel, 650);
       setTimeout(() => {
         sweep.remove();
         veil.remove();
