@@ -131,10 +131,30 @@
     #mm-root svg { width: 100%; height: 100%; display: block; overflow: visible; }
     #mm-root path { fill: none; stroke: #7dff5a; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(125,255,90,.8)); }
 
+    /* Jardín del Edén */
+    #mm-garden { position: fixed; inset: 0; z-index: 9994; pointer-events: none; overflow: hidden; transition: opacity .8s ease;
+      background: radial-gradient(ellipse at 70% 0%, rgba(255,246,196,.7) 0%, rgba(168,220,115,.45) 25%, rgba(74,157,67,.55) 55%, rgba(31,95,44,.72) 100%); }
+    #mm-garden .mm-sun { position: absolute; top: -14vmax; right: -10vmax; width: 60vmax; height: 60vmax; border-radius: 50%;
+      background: radial-gradient(circle, #fffbe0 0%, #ffe38a 22%, rgba(255,220,120,0) 62%); animation: mmSunPulse 6s ease-in-out infinite; mix-blend-mode: screen; }
+    @keyframes mmSunPulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+    #mm-garden .mm-rays { position: absolute; top: -40vmax; right: -40vmax; width: 110vmax; height: 110vmax;
+      background: repeating-conic-gradient(from 0deg, rgba(255,240,180,.22) 0deg 6deg, rgba(255,240,180,0) 6deg 18deg);
+      animation: mmRays 60s linear infinite; mix-blend-mode: soft-light; }
+    @keyframes mmRays { to { transform: rotate(360deg); } }
+    #mm-garden .mm-trees { position: absolute; left: 0; bottom: 0; width: 100%; height: 38vh; overflow: visible; }
+    #mm-garden .mm-tree { animation: mmSway 5s ease-in-out infinite; }
+    @keyframes mmSway { 0%,100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
+    #mm-garden .mm-butterfly { position: absolute; left: 0; top: 0; width: 24px; height: 20px; will-change: transform; }
+    #mm-garden .mm-butterfly svg { width: 100%; height: 100%; overflow: visible; }
+    #mm-garden .mm-butterfly g { transform-origin: 12px 9px; animation: mmFlap .3s ease-in-out infinite alternate; }
+    @keyframes mmFlap { from { transform: scaleX(1); } to { transform: scaleX(.2); } }
+    #mm-garden .mm-flower { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; }
+    #mm-garden .mm-flower svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
     @media (max-width: 500px) { #mm-panel .mm-items { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
       #mm-hongo .mm-cap, #mm-hongo .mm-glow { animation: none; }
-      #mm-sweep, #mm-veil, #mm-vignette, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, #mm-creep { display: none; }
+      #mm-sweep, #mm-veil, #mm-vignette, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, #mm-creep, #mm-garden { display: none; }
       #mm-panel .mm-loader-bar i { animation: none; width: 100%; }
       #mm-panel, #mm-panel .mm-membrane path, #mm-panel .mm-infest path { animation: none; }
       #mm-root { display: none; }
@@ -197,67 +217,64 @@
   let activeCreep = null;
   let cursorSporeHandler = null;
 
-  function growCreep(origin, dur) {
+  // ---------- JARDÍN DEL EDÉN ----------
+  // Una luz cálida se expande desde el hongo y convierte la página en un bosque:
+  // sol con rayos, árboles que se mecen, mariposas que vuelan y hojas que caen.
+  const FLOWER_COLORS = ['#ff8fb1', '#fff4f7', '#ffd166', '#c9a7ff'];
+
+  function treeSVG(x, y, s, i) {
+    const h = 150 * s;
+    return `<g class="mm-tree" style="transform-origin:${x}px ${y}px; animation-delay:${-i * 1.3}s">
+      <rect x="${x - 6 * s}" y="${y - h * 0.55}" width="${12 * s}" height="${h * 0.55}" rx="4" fill="#6b4a2e"/>
+      <circle cx="${x}" cy="${y - h * 0.75}" r="${52 * s}" fill="#2f7a35"/>
+      <circle cx="${x - 30 * s}" cy="${y - h * 0.6}" r="${36 * s}" fill="#3e9a44"/>
+      <circle cx="${x + 32 * s}" cy="${y - h * 0.62}" r="${38 * s}" fill="#4caf50"/>
+    </g>`;
+  }
+
+  function flowerSVG(color) {
+    const petals = [0, 72, 144, 216, 288].map((a) =>
+      `<ellipse cx="0" cy="-6" rx="3.6" ry="5.6" fill="${color}" transform="rotate(${a})"/>`).join('');
+    return `<svg viewBox="-12 -12 24 24" aria-hidden="true">${petals}<circle r="2.6" fill="#ffd166"/></svg>`;
+  }
+
+  function spawnButterflies(wrap, n) {
+    const W = window.innerWidth, H = window.innerHeight;
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('div');
+      b.className = 'mm-butterfly';
+      const c = FLOWER_COLORS[i % FLOWER_COLORS.length];
+      b.innerHTML = `<svg viewBox="0 0 24 20" aria-hidden="true">
+        <g><ellipse cx="7" cy="9" rx="6" ry="7" fill="${c}"/><ellipse cx="17" cy="9" rx="6" ry="7" fill="${c}"/></g>
+        <rect x="11" y="5" width="2" height="10" rx="1" fill="#3b2c1e"/></svg>`;
+      wrap.appendChild(b);
+      const pts = Array.from({ length: 6 }, () => ({ x: Math.random() * W, y: Math.random() * H * 0.75 }));
+      const frames = pts.map((p, k) => ({ transform: `translate(${p.x}px, ${p.y}px)`, offset: k / (pts.length - 1) }));
+      frames.push({ transform: `translate(${pts[0].x}px, ${pts[0].y}px)`, offset: 1 });
+      b.animate(frames, { duration: 9000 + Math.random() * 6000, iterations: Infinity, easing: 'ease-in-out', delay: Math.random() * 2000 });
+    }
+  }
+
+  function growGarden(origin, dur) {
     const vw = window.innerWidth, vh = window.innerHeight;
     const maxR = Math.hypot(Math.max(origin.x, vw - origin.x), Math.max(origin.y, vh - origin.y)) + 60;
     const wrap = document.createElement('div');
-    wrap.id = 'mm-creep';
+    wrap.id = 'mm-garden';
     wrap.innerHTML = `
-      <svg viewBox="0 0 ${vw} ${vh}" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <filter id="mm-organic" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-            <feTurbulence id="mm-turb" type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/>
-            <feDisplacementMap id="mm-disp" in="SourceGraphic" in2="n" scale="34" xChannelSelector="R" yChannelSelector="G"/>
-          </filter>
-          <filter id="mm-veins" color-interpolation-filters="sRGB">
-            <feTurbulence id="mm-vturb" type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="2" result="v"/>
-            <feColorMatrix in="v" type="matrix" values="0 0 0 0 0.75  0 0 0 0 1  0 0 0 0 0.55  0 0 0 12 -7.2"/>
-          </filter>
-          <radialGradient id="mm-creep-grad" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="#5b8a44" stop-opacity=".6"/>
-            <stop offset=".7" stop-color="#2c4a24" stop-opacity=".75"/>
-            <stop offset="1" stop-color="#14240f" stop-opacity=".85"/>
-          </radialGradient>
-          <mask id="mm-blob-mask">
-            <circle id="mm-mask-c" cx="${origin.x}" cy="${origin.y}" r="0" fill="#fff" filter="url(#mm-organic)"/>
-          </mask>
-        </defs>
-        <circle id="mm-blob" cx="${origin.x}" cy="${origin.y}" r="0" fill="url(#mm-creep-grad)" filter="url(#mm-organic)"/>
-        <g mask="url(#mm-blob-mask)" opacity=".38">
-          <rect id="mm-vein-rect" width="100%" height="100%" filter="url(#mm-veins)"/>
-        </g>
+      <div class="mm-sun"></div>
+      <div class="mm-rays"></div>
+      <svg class="mm-trees" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        ${treeSVG(110, 300, 1.0, 0)}${treeSVG(300, 300, 0.7, 1)}${treeSVG(690, 300, 0.85, 2)}${treeSVG(900, 300, 1.1, 3)}
       </svg>`;
     document.body.appendChild(wrap);
 
-    const blob = wrap.querySelector('#mm-blob');
-    const mask = wrap.querySelector('#mm-mask-c');
-    const disp = wrap.querySelector('#mm-disp');
-    const turb = wrap.querySelector('#mm-turb');
-    const vturb = wrap.querySelector('#mm-vturb');
-    const start = performance.now();
+    // La luz se expande desde el hongo
+    wrap.animate([
+      { clipPath: `circle(0px at ${origin.x}px ${origin.y}px)` },
+      { clipPath: `circle(${maxR}px at ${origin.x}px ${origin.y}px)` },
+    ], { duration: dur, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
 
-    // Latido: el borde respira y las venas se mueven despacio mientras el bosque esté vivo
-    function living(e) {
-      disp.setAttribute('scale', (34 + 16 * Math.sin(e / 260)).toFixed(2));
-      turb.setAttribute('baseFrequency', (0.012 + 0.003 * Math.sin(e / 600)).toFixed(4));
-      vturb.setAttribute('baseFrequency', (0.045 + 0.006 * Math.sin(e / 900)).toFixed(4));
-    }
-
-    function grow(now) {
-      const e = now - start;
-      const t = Math.min(1, e / dur);
-      const r = maxR * (1 - Math.pow(1 - t, 3));
-      blob.setAttribute('r', r);
-      mask.setAttribute('r', r);
-      living(e);
-      if (t < 1) { requestAnimationFrame(grow); return; }
-      // Cuando termina de crecer, sigue vivo a menor frecuencia (ahorra CPU)
-      const iv = setInterval(() => {
-        if (!wrap.isConnected) { clearInterval(iv); return; }
-        living(performance.now() - start);
-      }, 90);
-    }
-    requestAnimationFrame(grow);
+    spawnButterflies(wrap, 6);
     return wrap;
   }
 
@@ -357,7 +374,7 @@
     const out = [];
     document.body.querySelectorAll('*').forEach((el) => {
       if (skip.has(el.tagName)) return;
-      if (el.closest('#mm-hongo, #mm-panel, #mm-sweep, #mm-veil, #mm-vignette, #mm-creep, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor')) return;
+      if (el.closest('#mm-hongo, #mm-panel, #mm-sweep, #mm-veil, #mm-vignette, #mm-creep, #mm-garden, .mm-portal, .mm-leaf, .mm-spore, .mm-dirt, .mm-tumor, .mm-flower')) return;
       const r = el.getBoundingClientRect();
       if (r.width < 20 || r.height < 12) return;
       if (r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw) return;
@@ -402,23 +419,27 @@
     });
   }
 
+  // Flores que brotan en los elementos tocados por la luz
   function spawnTumors(picked) {
-    if (!picked.length) return;
+    const garden = activeCreep;
+    if (!picked.length || !garden) return;
     const maxD = picked[picked.length - 1].d || 1;
     picked.slice(0, CONFIG.tumorMax).forEach(({ rect, d }, i) => {
-      const t = document.createElement('div');
-      t.className = 'mm-tumor';
-      t.style.left = (rect.left + Math.random() * rect.width) + 'px';
-      t.style.top = (rect.top + Math.random() * rect.height) + 'px';
-      document.body.appendChild(t);
+      const f = document.createElement('div');
+      f.className = 'mm-flower';
+      f.style.left = (rect.left + Math.random() * rect.width) + 'px';
+      f.style.top = (rect.top + Math.random() * rect.height) + 'px';
+      f.innerHTML = flowerSVG(FLOWER_COLORS[i % FLOWER_COLORS.length]);
+      garden.appendChild(f);
       const delay = (d / maxD) * 800;
-      const anim = t.animate([
-        { transform: 'scale(0)', opacity: 0, offset: 0 },
-        { transform: 'scale(1.3)', opacity: 1, offset: 0.35 },
-        { transform: 'scale(1)', opacity: 0.8, offset: 0.6 },
-        { transform: 'scale(0)', opacity: 0, offset: 1 },
-      ], { duration: 1800, delay: delay + i * 10, fill: 'backwards', easing: 'ease-in-out' });
-      anim.onfinish = () => t.remove();
+      f.animate([
+        { transform: 'scale(0) rotate(-120deg)', opacity: 0 },
+        { transform: 'scale(1.15) rotate(12deg)', opacity: 1, offset: 0.6 },
+        { transform: 'scale(1) rotate(0deg)', opacity: 1 },
+      ], { duration: 1100, delay, fill: 'backwards', easing: 'cubic-bezier(.2,.8,.2,1)' });
+      f.firstChild.animate([
+        { transform: 'rotate(-6deg)' }, { transform: 'rotate(6deg)' },
+      ], { duration: 2400 + Math.random() * 1200, direction: 'alternate', iterations: Infinity, easing: 'ease-in-out', delay });
     });
   }
 
@@ -609,7 +630,7 @@
 
       // 3) El creep crece desde la base del hongo, con temblor
       fadeCreep();
-      activeCreep = growCreep({ x: origin.x, y: baseY }, CONFIG.creepMs);
+      activeCreep = growGarden({ x: origin.x, y: baseY }, CONFIG.creepMs);
       shake([activeCreep, veil], 520, 5);
       setTimeout(() => shake([activeCreep, veil], 380, 3), CONFIG.creepMs * 0.55);
       enableCursorSpores();
