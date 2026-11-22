@@ -1,15 +1,15 @@
 // ============================================================
-// HONGUITO MÁGICO — otromundo
-// Un hongo chiquito con pasto en la esquina. Al tocarlo, se abre
-// un portal desde el hongo: la página se tiñe de otro mundo, la
-// magia recorre todos sus elementos y después aparece el panel
-// de servicios como un mundo recién descubierto.
+// HONGUITO DEL BOSQUE — otromundo
+// Un hongo chiquito escondido entre el pasto. Al tocarlo se abre
+// un rincón del bosque: caen hojas, suben esporas, la luz se
+// filtra entre los árboles, la página reacciona con magia suave
+// y aparece el panel de servicios como un hallazgo en el bosque.
 // ============================================================
 (function () {
   const CONFIG = {
     brand: 'otromundo',
-    kicker: 'Descubriste un mundo nuevo',
-    badge: '✦ Agencia de Páginas Web',
+    kicker: 'Descubriste un rincón escondido',
+    badge: 'Agencia de Páginas Web',
     headline: 'Tu <span>sitio web</span> listo y profesional',
     sub: 'Diseño moderno, rápido y a tu medida. Trabajamos con vos desde el primer boceto hasta el lanzamiento.',
     features: ['Diseño personalizado y único', 'Entrega rápida, sin vueltas', 'Soporte incluido el primer mes'],
@@ -17,125 +17,145 @@
     priceNote: 'pago único / USD',
     priceItems: ['Dominio incluido el 1er año', 'Hosting ultra-rápido', 'Diseño responsive', 'SEO básico incluido'],
     whatsapp: 'https://wa.me/59894691690?text=Hola%21%20Vi%20que%20hacen%20p%C3%A1ginas%20web%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20%F0%9F%9A%80',
-    magicMaxElements: 90,   // cuántos elementos de la página participan de la magia
-    loadingMs: 1200,        // tiempo de "carga" del mundo dentro del panel
+    magicMaxElements: 90,
+    loadingMs: 1200,
+    leafCount: 14,
+    sporeCount: 12,
   };
 
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const css = `
     #mm-hongo { position: fixed; left: 14px; bottom: 10px; width: 22px; height: 24px; z-index: 9998; cursor: pointer; border: 0; padding: 0; background: none; -webkit-tap-highlight-color: transparent; }
-    #mm-hongo svg { width: 100%; height: 100%; overflow: visible; transition: transform .4s ease; }
-    #mm-hongo .mm-cap { transform-origin: 50% 100%; animation: mmBreathe 4.5s ease-in-out infinite; }
-    #mm-hongo .mm-glow { animation: mmGlow 3.2s ease-in-out infinite; }
-    #mm-hongo:hover svg { transform: translateY(-3px) scale(1.06); }
-    #mm-hongo:focus-visible { outline: 2px solid #0ff; outline-offset: 4px; border-radius: 50%; }
-    @keyframes mmBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
-    @keyframes mmGlow { 0%,100% { opacity: .35; } 50% { opacity: .8; } }
+    #mm-hongo svg { width: 100%; height: 100%; overflow: visible; transition: transform .5s ease; }
+    #mm-hongo .mm-cap { transform-origin: 50% 100%; animation: mmBreathe 5s ease-in-out infinite; }
+    #mm-hongo .mm-glow { animation: mmGlow 3.6s ease-in-out infinite; }
+    #mm-hongo:hover svg { transform: translateY(-2px) rotate(-3deg); }
+    #mm-hongo:focus-visible { outline: 2px solid #d9a441; outline-offset: 4px; border-radius: 50%; }
+    @keyframes mmBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    @keyframes mmGlow { 0%,100% { opacity: .3; } 50% { opacity: .7; } }
 
-    /* Portal: anillo de luz que sale del hongo */
+    /* Círculo de luz cálida que se expande desde el hongo */
     .mm-portal { position: fixed; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; z-index: 9996; pointer-events: none;
-      border: 2px solid #0ff; box-shadow: 0 0 24px #0ff, inset 0 0 18px #a855f7; animation: mmPortal 1.3s cubic-bezier(.2,.7,.2,1) forwards; }
-    @keyframes mmPortal { from { transform: scale(1); opacity: 1; } 70% { opacity: .8; } to { transform: scale(90); opacity: 0; } }
+      border: 2px solid rgba(255,240,200,.85); box-shadow: 0 0 30px rgba(255,220,140,.55); animation: mmPortal 1.4s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes mmPortal { from { transform: scale(1); opacity: 1; } 70% { opacity: .7; } to { transform: scale(90); opacity: 0; } }
 
-    /* Velo de otro mundo: la página se tiñe de violeta-cian y vuelve */
+    /* Atardecer en el bosque: la página se tiñe de verde musgo y vuelve */
     #mm-veil { position: fixed; inset: 0; z-index: 9995; pointer-events: none;
-      background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(41,231,231,.28) 0%, rgba(168,85,247,.42) 35%, rgba(6,8,24,.88) 75%);
-      animation: mmVeil 1.8s ease-in-out forwards; }
+      background: radial-gradient(circle at var(--mm-ox, 50%) var(--mm-oy, 100%), rgba(255,226,160,.22) 0%, rgba(90,120,70,.38) 40%, rgba(30,45,28,.85) 80%);
+      animation: mmVeil 1.9s ease-in-out forwards; }
     @keyframes mmVeil { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
 
+    /* Rayo de sol que atraviesa el bosque */
     #mm-sweep { position: fixed; inset: 0; z-index: 9997; pointer-events: none; mix-blend-mode: screen;
-      background: linear-gradient(115deg, transparent 38%, rgba(0,255,255,.25) 46%, rgba(255,255,255,.7) 50%, rgba(168,85,247,.3) 54%, transparent 62%);
-      background-size: 260% 100%; background-position: 120% 0; animation: mmSweep 1.5s cubic-bezier(.4,.1,.2,1) forwards; }
+      background: linear-gradient(100deg, transparent 40%, rgba(255,236,180,.28) 50%, transparent 60%);
+      background-size: 260% 100%; background-position: 120% 0; animation: mmSweep 1.8s cubic-bezier(.4,.1,.2,1) forwards; }
     @keyframes mmSweep { from { background-position: 120% 0; opacity: 1; } 80% { opacity: 1; } to { background-position: -40% 0; opacity: 0; } }
 
-    .mm-spark { position: fixed; width: 5px; height: 5px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px #0ff, 0 0 14px #a855f7; z-index: 9997; pointer-events: none; animation: mmSpark 1.1s ease-out forwards; }
-    @keyframes mmSpark { 0% { transform: scale(0); opacity: 0; } 30% { opacity: 1; } 100% { transform: scale(1.8) translateY(-18px); opacity: 0; } }
+    /* Hojas que caen y esporas que suben */
+    .mm-leaf { position: fixed; top: -20px; width: 12px; height: 8px; border-radius: 0 80% 0 80%; background: linear-gradient(135deg,#8fb35a,#4a6b3a); z-index: 9997; pointer-events: none;
+      animation: mmFall var(--mm-dur, 3.4s) linear forwards; }
+    @keyframes mmFall { from { transform: translate(0,0) rotate(0deg); } to { transform: translate(var(--mm-dx, 0px), 110vh) rotate(540deg); } }
+    .mm-spore { position: fixed; width: 4px; height: 4px; border-radius: 50%; background: #fff3d6; box-shadow: 0 0 6px #fff3d6; z-index: 9997; pointer-events: none;
+      animation: mmSpore var(--mm-dur, 2.4s) ease-out forwards; }
+    @keyframes mmSpore { 0% { transform: translate(0,0); opacity: 0; } 25% { opacity: .9; } 100% { transform: translate(var(--mm-dx, 0px), var(--mm-dy, -160px)); opacity: 0; } }
 
-    #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.92); width: min(560px, 92vw); max-height: 88vh; overflow: auto; z-index: 9999;
-      background: linear-gradient(160deg, #0a0d24 0%, #060818 100%); color: #fff; border-radius: 18px; padding: 28px 28px 26px; box-sizing: border-box;
-      border: 1px solid rgba(0,255,255,.18); box-shadow: 0 0 60px rgba(168,85,247,.25), 0 0 1px #0ff; font-family: 'Inter', system-ui, sans-serif;
-      opacity: 0; pointer-events: none; transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+    #mm-panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.94); width: min(560px, 92vw); max-height: 88vh; overflow: auto; z-index: 9999;
+      background: radial-gradient(circle at 20% 0%, #f8f0dc 0%, #efe3c4 100%); color: #3b2c1e; border-radius: 16px; padding: 28px 28px 26px; box-sizing: border-box;
+      border: 1px solid rgba(90,62,43,.25); box-shadow: 0 18px 50px rgba(20,35,20,.45), inset 0 0 0 4px rgba(255,255,255,.35); font-family: Georgia, 'Times New Roman', serif;
+      opacity: 0; pointer-events: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
     #mm-panel.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-    #mm-panel .mm-kicker { font-size: .66rem; letter-spacing: 3px; text-transform: uppercase; color: #a855f7; margin-bottom: 4px; }
-    #mm-panel .mm-brand { font-size: 1.3rem; font-weight: 700; letter-spacing: 2px; background: linear-gradient(90deg,#00ffff,#a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    #mm-panel .mm-badge { display: inline-block; margin: 10px 0 12px; font-size: .62rem; letter-spacing: 3px; text-transform: uppercase; color: #0ff; background: rgba(0,255,255,.1); border: 1px solid rgba(0,255,255,.25); padding: 4px 10px; border-radius: 999px; }
-    #mm-panel h2 { margin: 0 0 10px; font-size: clamp(1.2rem, 2.6vw, 1.6rem); line-height: 1.25; }
-    #mm-panel h2 span { background: linear-gradient(90deg,#0ff,#a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    #mm-panel p { color: rgba(255,255,255,.6); font-size: .9rem; line-height: 1.55; margin: 0 0 14px; }
+    #mm-panel .mm-kicker { font-size: .66rem; letter-spacing: 2.5px; text-transform: uppercase; color: #8a5a2b; margin-bottom: 4px; font-style: italic; }
+    #mm-panel .mm-brand { font-size: 1.35rem; font-weight: 700; letter-spacing: 1px; color: #2f5233; }
+    #mm-panel .mm-badge { display: inline-block; margin: 8px 0 12px; font-size: .64rem; letter-spacing: 2px; text-transform: uppercase; color: #5b6e2f; background: rgba(143,179,90,.18); border: 1px solid rgba(91,110,47,.35); padding: 4px 10px; border-radius: 999px; font-family: system-ui, sans-serif; }
+    #mm-panel h2 { margin: 0 0 10px; font-size: clamp(1.2rem, 2.6vw, 1.6rem); line-height: 1.25; color: #2f5233; }
+    #mm-panel h2 span { color: #b5651d; font-style: italic; }
+    #mm-panel p { color: #6b5540; font-size: .92rem; line-height: 1.6; margin: 0 0 14px; }
     #mm-panel ul { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 7px; }
-    #mm-panel li { display: flex; gap: 8px; align-items: center; color: rgba(255,255,255,.75); font-size: .85rem; }
-    #mm-panel li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg,#00ffff,#a855f7); flex-shrink: 0; }
+    #mm-panel li { display: flex; gap: 8px; align-items: center; color: #4a3828; font-size: .88rem; }
+    #mm-panel li::before { content: ""; width: 7px; height: 7px; border-radius: 50% 0 50% 0; background: linear-gradient(135deg,#8fb35a,#4a6b3a); flex-shrink: 0; }
     #mm-panel .mm-price { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
-    #mm-panel .mm-amount { font-size: 2.6rem; font-weight: 700; background: linear-gradient(90deg,#00ffff,#a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    #mm-panel .mm-note { font-size: .7rem; color: rgba(255,255,255,.4); letter-spacing: 1px; text-transform: uppercase; }
-    #mm-panel .mm-items { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-bottom: 20px; font-size: .78rem; color: rgba(255,255,255,.7); }
-    #mm-panel .mm-cta { display: inline-block; text-decoration: none; background: linear-gradient(135deg,#0ff 0%,#a855f7 100%); color: #000; font-weight: 700; padding: 12px 22px; border-radius: 999px; font-size: .9rem; }
-    #mm-panel .mm-cta:hover { box-shadow: 0 0 30px rgba(168,85,247,.45); }
-    #mm-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); color: rgba(255,255,255,.7); cursor: pointer; font-size: 14px; }
-    #mm-close:hover { color: #fff; background: rgba(255,255,255,.16); }
+    #mm-panel .mm-amount { font-size: 2.6rem; font-weight: 700; color: #b5651d; }
+    #mm-panel .mm-note { font-size: .7rem; color: #8a7360; letter-spacing: 1px; text-transform: uppercase; font-family: system-ui, sans-serif; }
+    #mm-panel .mm-items { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-bottom: 20px; font-size: .8rem; color: #5b4632; font-family: system-ui, sans-serif; }
+    #mm-panel .mm-cta { display: inline-block; text-decoration: none; background: linear-gradient(135deg,#d9a441 0%,#b5651d 100%); color: #fff; font-weight: 700; padding: 12px 22px; border-radius: 999px; font-size: .9rem; font-family: system-ui, sans-serif; box-shadow: 0 4px 14px rgba(181,101,29,.3); }
+    #mm-panel .mm-cta:hover { box-shadow: 0 6px 20px rgba(181,101,29,.45); }
+    #mm-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(90,62,43,.25); background: rgba(255,255,255,.5); color: #6b5540; cursor: pointer; font-size: 14px; }
+    #mm-close:hover { color: #3b2c1e; background: #fff; }
 
-    /* Carga del mundo dentro del panel */
+    /* Brotando el mundo dentro del panel */
     #mm-panel .mm-loader { display: none; padding: 26px 0 30px; text-align: center; }
     #mm-panel.loading .mm-loader { display: block; }
     #mm-panel.loading .mm-content { opacity: 0; }
-    #mm-panel .mm-content { transition: opacity .5s ease .1s; }
-    #mm-panel .mm-loader-text { font-size: .72rem; letter-spacing: 3px; text-transform: uppercase; color: #0ff; margin-bottom: 14px; }
-    #mm-panel .mm-loader-bar { height: 4px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; }
-    #mm-panel .mm-loader-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg,#0ff,#a855f7); box-shadow: 0 0 12px #0ff; animation: mmLoad linear forwards; }
+    #mm-panel .mm-content { transition: opacity .6s ease .1s; }
+    #mm-panel .mm-loader-text { font-size: .8rem; letter-spacing: 2px; font-style: italic; color: #6b5540; margin-bottom: 14px; }
+    #mm-panel .mm-loader-bar { height: 5px; border-radius: 999px; background: rgba(90,62,43,.12); overflow: hidden; }
+    #mm-panel .mm-loader-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg,#8fb35a,#d9a441); animation: mmLoad linear forwards; }
     @keyframes mmLoad { to { width: 100%; } }
 
     @media (max-width: 500px) { #mm-panel .mm-items { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
       #mm-hongo .mm-cap, #mm-hongo .mm-glow { animation: none; }
-      #mm-sweep, #mm-veil, .mm-portal, .mm-spark { display: none; }
+      #mm-sweep, #mm-veil, .mm-portal, .mm-leaf, .mm-spore { display: none; }
       #mm-panel .mm-loader-bar i { animation: none; width: 100%; }
     }
   `;
 
-  // Hongo con pasto. Colores: casquete cian/violeta, pie claro, pasto verde apagado.
+  // Hongo del bosque: sombrero ocre con manchitas crema, pie claro, pasto verde.
   const hongoSVG = `
     <svg viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="mmCap" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#29e7e7"/><stop offset="1" stop-color="#a855f7"/>
+          <stop offset="0" stop-color="#d9a441"/><stop offset="1" stop-color="#8b4a2b"/>
         </linearGradient>
         <radialGradient id="mmGlowG" cx=".5" cy=".5" r=".5">
-          <stop offset="0" stop-color="#0ff" stop-opacity=".55"/><stop offset="1" stop-color="#0ff" stop-opacity="0"/>
+          <stop offset="0" stop-color="#ffe6a8" stop-opacity=".6"/><stop offset="1" stop-color="#ffe6a8" stop-opacity="0"/>
         </radialGradient>
       </defs>
       <ellipse class="mm-glow" cx="32" cy="58" rx="28" ry="10" fill="url(#mmGlowG)"/>
-      <path d="M22 44 Q20 56 17 62 L47 62 Q44 56 42 44 Z" fill="#e8ecf3" opacity=".92"/>
-      <path d="M26 46 Q25 54 24 60" stroke="#c7cfdc" stroke-width="1.2" fill="none" opacity=".7"/>
+      <path d="M22 44 Q20 56 17 62 L47 62 Q44 56 42 44 Z" fill="#f3ead2" opacity=".95"/>
+      <path d="M26 46 Q25 54 24 60" stroke="#d8c9a6" stroke-width="1.2" fill="none" opacity=".7"/>
       <g class="mm-cap">
         <path d="M6 42 Q6 16 32 14 Q58 16 58 42 Q58 46 52 46 L12 46 Q6 46 6 42 Z" fill="url(#mmCap)"/>
-        <circle cx="20" cy="27" r="3" fill="#fff" opacity=".85"/>
-        <circle cx="36" cy="22" r="2.2" fill="#fff" opacity=".7"/>
-        <circle cx="46" cy="32" r="2.6" fill="#fff" opacity=".75"/>
-        <circle cx="30" cy="36" r="1.6" fill="#fff" opacity=".6"/>
+        <circle cx="20" cy="27" r="3" fill="#fff6e0" opacity=".85"/>
+        <circle cx="36" cy="22" r="2.2" fill="#fff6e0" opacity=".7"/>
+        <circle cx="46" cy="32" r="2.6" fill="#fff6e0" opacity=".75"/>
+        <circle cx="30" cy="36" r="1.6" fill="#fff6e0" opacity=".6"/>
       </g>
-      <path d="M12 62 Q13 56 10 50 M15 62 Q16 54 14 48 M52 62 Q51 56 54 50 M49 62 Q48 54 50 48" stroke="#4ade80" stroke-width="2" fill="none" stroke-linecap="round" opacity=".75"/>
-      <path d="M4 63 Q32 58 60 63" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".55"/>
+      <path d="M12 62 Q13 56 10 50 M15 62 Q16 54 14 48 M52 62 Q51 56 54 50 M49 62 Q48 54 50 48" stroke="#6b8f3a" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>
+      <path d="M4 63 Q32 58 60 63" stroke="#4a6b3a" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/>
     </svg>`;
 
-  function sparkles() {
-    const count = 16;
-    for (let i = 0; i < count; i++) {
-      const s = document.createElement('div');
-      s.className = 'mm-spark';
-      s.style.left = Math.random() * 100 + 'vw';
-      s.style.top = Math.random() * 100 + 'vh';
-      s.style.animationDelay = Math.random() * 0.9 + 's';
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 2600);
+  // Hojas que caen desde arriba y esporas que suben desde el hongo.
+  function forestParticles(origin) {
+    for (let i = 0; i < CONFIG.leafCount; i++) {
+      const leaf = document.createElement('div');
+      leaf.className = 'mm-leaf';
+      leaf.style.left = Math.random() * 100 + 'vw';
+      leaf.style.setProperty('--mm-dur', (3 + Math.random() * 2) + 's');
+      leaf.style.setProperty('--mm-dx', ((Math.random() - 0.5) * 120) + 'px');
+      leaf.style.animationDelay = Math.random() * 0.8 + 's';
+      document.body.appendChild(leaf);
+      setTimeout(() => leaf.remove(), 5200);
+    }
+    for (let i = 0; i < CONFIG.sporeCount; i++) {
+      const spore = document.createElement('div');
+      spore.className = 'mm-spore';
+      spore.style.left = origin.x + 'px';
+      spore.style.top = origin.y + 'px';
+      spore.style.setProperty('--mm-dur', (2 + Math.random() * 1.2) + 's');
+      spore.style.setProperty('--mm-dx', ((Math.random() - 0.5) * 140) + 'px');
+      spore.style.setProperty('--mm-dy', (-90 - Math.random() * 150) + 'px');
+      spore.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(spore);
+      setTimeout(() => spore.remove(), 3500);
     }
   }
 
-  // Magia sobre los elementos de la página: oleada desde el hongo hacia afuera.
-  // Cada elemento hace una de tres cosas imposibles: levitar con brillo,
-  // girar en 3D como si lo volteara una mano invisible, o desvanecerse
-  // y reaparecer en otro tono. Las animaciones de Web Animations API se
-  // limpian solas al terminar, así que la página vuelve a su estado normal.
+  // Magia suave sobre los elementos de la página: oleada desde el hongo.
+  // Cada elemento hace una de tres cosas: se mece como una rama con el viento,
+  // se da vuelta como una hoja, o se empaña un instante como rocío y vuelve.
+  // Las animaciones de Web Animations API se limpian solas al terminar.
   function magicOverPage(origin) {
     if (!document.body.animate) return 0;
     const skip = new Set(['SCRIPT', 'STYLE', 'LINK', 'META', 'NOSCRIPT', 'BR', 'SVG', 'PATH']);
@@ -144,11 +164,11 @@
 
     document.body.querySelectorAll('*').forEach((el) => {
       if (skip.has(el.tagName)) return;
-      if (el.closest('#mm-hongo, #mm-panel, #mm-sweep, #mm-veil, .mm-portal, .mm-spark')) return;
+      if (el.closest('#mm-hongo, #mm-panel, #mm-sweep, #mm-veil, .mm-portal, .mm-leaf, .mm-spore')) return;
       const r = el.getBoundingClientRect();
       if (r.width < 20 || r.height < 12) return;
       if (r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw) return;
-      if (r.width * r.height > vw * vh * 0.6) return; // no animar contenedores enormes
+      if (r.width * r.height > vw * vh * 0.6) return;
       const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
       candidates.push({ el, display: getComputedStyle(el).display, d: Math.hypot(cx - origin.x, cy - origin.y) });
     });
@@ -158,30 +178,29 @@
     const maxD = picked.length ? picked[picked.length - 1].d || 1 : 1;
 
     picked.forEach(({ el, display, d }, i) => {
-      const delay = (d / maxD) * 700; // la oleada sale del portal
-      const dur = 1400 + Math.random() * 600;
+      const delay = (d / maxD) * 800;
+      const dur = 1600 + Math.random() * 700;
       let kind = i % 3;
-      if (display === 'inline' && kind === 1) kind = 2; // rotateY no aplica a inline
+      if (display === 'inline' && kind === 1) kind = 2;
 
       let frames;
       if (kind === 0) {
-        const lift = 6 + Math.random() * 10;
-        const tilt = (Math.random() - 0.5) * 10;
+        const sway = (Math.random() < 0.5 ? -1 : 1) * (0.6 + Math.random() * 0.8);
         frames = [
-          { transform: 'translateY(0) rotate(0deg)' },
-          { transform: `translateY(-${lift}px) rotate(${tilt}deg)`, filter: 'drop-shadow(0 0 10px rgba(0,255,255,.55))' },
-          { transform: 'translateY(0) rotate(0deg)' },
+          { transform: 'rotate(0deg)' },
+          { transform: `rotate(${sway}deg) translateY(-2px)` },
+          { transform: 'rotate(0deg)' },
         ];
       } else if (kind === 1) {
         frames = [
           { transform: 'rotateY(0deg)' },
-          { transform: 'rotateY(180deg)', filter: 'brightness(1.4) hue-rotate(60deg)' },
+          { transform: 'rotateY(180deg)', filter: 'sepia(.5) saturate(1.2)' },
           { transform: 'rotateY(360deg)' },
         ];
       } else {
         frames = [
           { opacity: 1, filter: 'none' },
-          { opacity: 0.15, filter: 'blur(3px) hue-rotate(180deg)' },
+          { opacity: 0.55, filter: 'blur(1.5px) brightness(1.15)' },
           { opacity: 1, filter: 'none' },
         ];
       }
@@ -213,7 +232,7 @@
     panel.innerHTML = `
       <button id="mm-close" type="button" aria-label="Cerrar">✕</button>
       <div class="mm-loader" aria-live="polite">
-        <div class="mm-loader-text">Abriendo ${CONFIG.brand}…</div>
+        <div class="mm-loader-text">Brotando ${CONFIG.brand}…</div>
         <div class="mm-loader-bar"><i style="animation-duration:${CONFIG.loadingMs}ms"></i></div>
       </div>
       <div class="mm-content">
@@ -254,35 +273,32 @@
       const rect = hongo.getBoundingClientRect();
       const origin = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 
-      // 1) El portal se abre desde el hongo
       const portal = document.createElement('div');
       portal.className = 'mm-portal';
       portal.style.left = origin.x + 'px';
       portal.style.top = origin.y + 'px';
       document.body.appendChild(portal);
 
-      // 2) La página se tiñe de otro mundo
       const veil = document.createElement('div');
       veil.id = 'mm-veil';
       veil.style.setProperty('--mm-ox', origin.x + 'px');
       veil.style.setProperty('--mm-oy', origin.y + 'px');
       document.body.appendChild(veil);
 
-      // 3) Barrido, chispas y magia sobre los elementos
       const sweep = document.createElement('div');
       sweep.id = 'mm-sweep';
       document.body.appendChild(sweep);
-      sparkles();
+
+      forestParticles(origin);
       magicOverPage(origin);
 
-      // 4) El mundo se revela en el panel
-      setTimeout(openPanel, 600);
+      setTimeout(openPanel, 650);
       setTimeout(() => {
         sweep.remove();
         veil.remove();
         portal.remove();
         busy = false;
-      }, 1800);
+      }, 1900);
     });
 
     panel.querySelector('#mm-close').addEventListener('click', closePanel);
